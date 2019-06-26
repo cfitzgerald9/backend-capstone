@@ -42,9 +42,18 @@
             <td>
                 @Html.DisplayFor(modelItem => item.CheckOut)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Check-in</a> |
-            </td>
+            @if (item.CheckOut == null || item.CheckIn == null)
+            {
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Check-in</a>
+                </td>
+            }
+            else
+            {
+                <td>
+                    Time logged
+                </td>
+            }
         </tr>
 }
     </tbody>

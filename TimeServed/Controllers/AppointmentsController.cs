@@ -93,7 +93,7 @@ namespace TimeServed.Controllers
                 vm.appointment.ApplicationUserId = currentUser.Id;
                 _context.Add(vm.appointment);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Details", new { id = vm.appointment.Id });
+                return RedirectToAction("Index");
             }
            vm.Clients = clients0;
             return View(vm);
@@ -111,6 +111,9 @@ namespace TimeServed.Controllers
             {
                 return NotFound();
             }
+            appointment.CheckIn = DateTime.Now;
+            _context.Update(appointment);
+            await _context.SaveChangesAsync();
             return View(appointment);
         }
 
@@ -121,15 +124,19 @@ namespace TimeServed.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,ApplicationUserId,ClientId,VisitDate,CheckIn,CheckOut")] Appointment appointment)
         {
+            var currentUser = await GetCurrentUserAsync();
+            
             if (id != appointment.Id)
             {
                 return NotFound();
             }
-
+            ModelState.Remove("ApplicationUserId");
             if (ModelState.IsValid)
             {
                 try
                 {
+                    appointment.ApplicationUserId = currentUser.Id;
+                    appointment.CheckOut = DateTime.Now;
                     _context.Update(appointment);
                     await _context.SaveChangesAsync();
                 }
