@@ -2,9 +2,10 @@
 
 @{
     ViewData["Title"] = "Index";
+
 }
 
-<h1>Index</h1>
+<h1>Appointment Book</h1>
 
 <p>
     <a asp-action="Create">Book a new appointment</a>
@@ -13,7 +14,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ClientId)
+                Client name
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.VisitDate)
@@ -31,7 +32,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ClientId)
+                @Html.DisplayFor(modelItem => item.client.FirstName) @Html.DisplayFor(modelItem => item.client.LastName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.VisitDate)
@@ -52,6 +53,12 @@
             {
                 <td>
                     Time logged
+                </td>
+            }
+            @if (item.VisitDate > DateTime.Now && item.CheckOut == null)
+            {
+                <td>
+                    <a asp-action="Delete" asp-route-id="@item.Id">Cancel appointment</a>
                 </td>
             }
         </tr>

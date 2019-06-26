@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -24,18 +25,25 @@ namespace TimeServed.Controllers
         }
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
         // GET: Appointments
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var currentUser = await GetCurrentUserAsync();
             if (currentUser.UserTypeId == 1)
             {
-
-                var applicationDbContext = _context.Appointments.Include(o => o.client).Where(a => a.ApplicationUserId == currentUser.Id);
+                var applicationDbContext = _context.Appointments
+                    .Include(o => o.client)
+                    .Where(a => a.ApplicationUserId == currentUser.Id);
+                ViewData["currentUser"] = currentUser;
                 return View(await applicationDbContext.ToListAsync());
             }
-            else if (currentUser.UserTypeId == 2)
+            if (currentUser.UserTypeId == 2)
             {
-                return View(await _context.Appointments.Include(c => c.ClientId).ToListAsync());
+                var applicationDbContext = _context.Appointments
+                    .Include(c => c.client)
+                    .Include(c => c.applicationUser);
+                ViewData["currentUser"] = currentUser;
+                return View(await applicationDbContext.ToListAsync());
             }
             else
             {
@@ -53,6 +61,8 @@ namespace TimeServed.Controllers
             }
 
             var appointment = await _context.Appointments
+                .Include(o => o.client)
+                .Include(o => o.applicationUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (appointment == null)
             {
@@ -182,7 +192,6 @@ namespace TimeServed.Controllers
             {
                 return NotFound();
             }
-
             var appointment = await _context.Appointments
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (appointment == null)
@@ -190,7 +199,11 @@ namespace TimeServed.Controllers
                 return NotFound();
             }
 
-            return View(appointment);
+            if (appointment.VisitDate > DateTime.Now)
+            {
+                return View(appointment);
+            }
+            else return View();
         }
 
         // POST: Appointments/Delete/5
