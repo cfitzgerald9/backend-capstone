@@ -10,7 +10,7 @@ namespace TimeServed.Models
     {
         public int Id { get; set; }
         [Required]
-        public int LocationName { get; set; }
+        public string LocationName { get; set; }
         [Required]
         public string StreetAddress { get; set; }
     }

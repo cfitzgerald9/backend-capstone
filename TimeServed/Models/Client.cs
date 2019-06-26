@@ -13,7 +13,13 @@ namespace TimeServed.Models
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
-
+        [Required]
         public int LocationId { get; set; }
+
+        public Location location { get; set; }
+
+        public ApplicationUser applicationUser { get; set; }
+
+        public string ApplicationUserId { get; set; }
     }
 }

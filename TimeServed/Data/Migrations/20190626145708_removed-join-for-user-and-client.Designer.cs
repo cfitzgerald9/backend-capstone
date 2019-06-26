@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TimeServed.Data;
 
 namespace TimeServed.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190626145708_removed-join-for-user-and-client")]
+    partial class removedjoinforuserandclient
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -230,22 +232,6 @@ namespace TimeServed.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Clients");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            FirstName = "Jakob",
-                            LastName = "Wildman",
-                            LocationId = 3
-                        },
-                        new
-                        {
-                            Id = 2,
-                            FirstName = "Susan",
-                            LastName = "MacAfee",
-                            LocationId = 1
-                        });
                 });
 
             modelBuilder.Entity("TimeServed.Models.FavoriteLocation", b =>
@@ -269,8 +255,7 @@ namespace TimeServed.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("LocationName")
-                        .IsRequired();
+                    b.Property<int>("LocationName");
 
                     b.Property<string>("StreetAddress")
                         .IsRequired();
@@ -278,26 +263,6 @@ namespace TimeServed.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Locations");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            LocationName = "South Central",
-                            StreetAddress = "1001 Centre Way, Charleston, WV 25309"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            LocationName = "West Virginia Regional Jail and Correctional Facility",
-                            StreetAddress = "1325 Virginia St E, Charleston, WV 25301"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            LocationName = "Mt Olive Correctional Complex",
-                            StreetAddress = "1 Mountainside Way, Mt Olive, WV 25185"
-                        });
                 });
 
             modelBuilder.Entity("TimeServed.Models.UserType", b =>
@@ -312,23 +277,6 @@ namespace TimeServed.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Role = "Attorney"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Role = "Guard"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Role = "Auditor"
-                        });
                 });
 
             modelBuilder.Entity("TimeServed.Models.ApplicationUser", b =>
