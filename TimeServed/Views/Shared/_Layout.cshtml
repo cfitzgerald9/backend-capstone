@@ -26,14 +26,53 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1">
+                @if (User.IsInRole("Attorney"))
+                {
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+
+                        <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Appointments" asp-action="Index">Appointments</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Attorneys" asp-action="Index">Appointments</a>
                             </li>
-                    </ul>
-                </div>
+                        </ul>
+                    </div>
+                }
+
+                @if (User.IsInRole("Guard"))
+                {
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Guards" asp-action="Index">Appointments</a>
+                            </li>
+                        </ul>
+                    </div>
+                }
+
+                @if (User.IsInRole("Auditor"))
+                {
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Auditors" asp-action="Index">Attorney Hours</a>
+                            </li>
+                        </ul>
+                    </div>
+                }
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                            </li>
+                        </ul>
+                    </div>
+                }
+                <partial name="_LoginPartial" />
             </div>
         </nav>
     </header>

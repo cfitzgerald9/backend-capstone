@@ -13,30 +13,31 @@ using TimeServed.Models.ViewModels;
 
 namespace TimeServed.Controllers
 {
-    public class AppointmentsController : Controller
+    public class AttorneysController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public AppointmentsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public AttorneysController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
+      
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
         // GET: Appointments
-        [Authorize]
+        [Authorize(Roles = "Attorney")]
         public async Task<IActionResult> Index()
         {
             var currentUser = await GetCurrentUserAsync();
                 var applicationDbContext = _context.Appointments
                     .Include(o => o.client)
                     .Where(a => a.ApplicationUserId == currentUser.Id);
-                ViewData["currentUser"] = currentUser;
                 return View(await applicationDbContext.ToListAsync());     
         }
 
         // GET: Appointments/Details/5
+        [Authorize(Roles = "Attorney")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -57,6 +58,7 @@ namespace TimeServed.Controllers
         }
 
         // GET: Appointments/Create
+        [Authorize(Roles = "Attorney")]
         public IActionResult Create()
         {
             AppointmentClientViewModel vm = new AppointmentClientViewModel();
@@ -72,6 +74,7 @@ namespace TimeServed.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Attorney")]
         public async Task<IActionResult> Create(AppointmentClientViewModel vm)
         { 
         SelectList clients = new SelectList(_context.Clients, "Id", "FirstName");
@@ -93,6 +96,7 @@ namespace TimeServed.Controllers
             return View(vm);
         }
         // GET: Appointments/Edit/5
+        [Authorize(Roles = "Attorney")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -116,6 +120,7 @@ namespace TimeServed.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Attorney")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,ApplicationUserId,ClientId,VisitDate,CheckIn,CheckOut")] Appointment appointment)
         {
             var currentUser = await GetCurrentUserAsync();
@@ -170,6 +175,7 @@ namespace TimeServed.Controllers
         }
 
         // GET: Appointments/Delete/5
+        [Authorize(Roles = "Attorney")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -193,6 +199,7 @@ namespace TimeServed.Controllers
         // POST: Appointments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Attorney")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var appointment = await _context.Appointments.FindAsync(id);
