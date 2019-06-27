@@ -14,6 +14,7 @@ using TimeServed.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TimeServed.Models;
+using Microsoft.Extensions.Logging;
 
 namespace TimeServed
 {
@@ -24,48 +25,39 @@ namespace TimeServed
             Configuration = configuration;
         }
 
+      
+        public IConfiguration Configuration { get; }
         private async Task CreateRoles(IServiceProvider serviceProvider)
         {
             //adding custom roles
             var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var UserManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            string[] roleNames = { "Admin", "Attorney", "Guard", "Auditor" };
+            string[] roleNames = { "Admin", "Manager", "Member" };
             IdentityResult roleResult;
-​
             foreach (var roleName in roleNames)
             {
-                //creating the roles and seeding them to the database
                 var roleExist = await RoleManager.RoleExistsAsync(roleName);
                 if (!roleExist)
                 {
                     roleResult = await RoleManager.CreateAsync(new IdentityRole(roleName));
                 }
             }
-​
-            //creating a super user who could maintain the web app
             var poweruser = new ApplicationUser
             {
                 UserName = Configuration.GetSection("UserSettings")["UserEmail"],
                 Email = Configuration.GetSection("UserSettings")["UserEmail"]
             };
-​
             string UserPassword = Configuration.GetSection("UserSettings")["UserPassword"];
             var _user = await UserManager.FindByEmailAsync(Configuration.GetSection("UserSettings")["UserEmail"]);
-​
             if (_user == null)
             {
                 var createPowerUser = await UserManager.CreateAsync(poweruser, UserPassword);
                 if (createPowerUser.Succeeded)
                 {
-                    //here we tie the new user to the "Admin" role 
                     await UserManager.AddToRoleAsync(poweruser, "Admin");
-​
                     }
             }
         }
-
-        public IConfiguration Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -80,6 +72,7 @@ namespace TimeServed
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<ApplicationUser>()
+                 .AddRoles<IdentityRole>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -87,11 +80,11 @@ namespace TimeServed
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage(); 
                 app.UseDatabaseErrorPage();
             }
             else
@@ -104,7 +97,6 @@ namespace TimeServed
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
             app.UseAuthentication();
 
             app.UseMvc(routes =>
