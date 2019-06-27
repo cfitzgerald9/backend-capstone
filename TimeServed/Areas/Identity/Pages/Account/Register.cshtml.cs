@@ -39,13 +39,6 @@ namespace TimeServed.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _context = context;
-
-            var userTypes = _context.UserTypes.ToList();
-            UserTypes = userTypes.Select(c => new SelectListItem
-            {
-                Value = c.Id.ToString(),
-                Text = c.Role
-            }).ToList();
         }
 
         [BindProperty]
@@ -106,7 +99,7 @@ namespace TimeServed.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName, StreetAddress = Input.StreetAddress, EmployeeId = Input.EmployeeId, UserTypeId = Input.UserTypeId };
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName, StreetAddress = Input.StreetAddress, EmployeeId = Input.EmployeeId};
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

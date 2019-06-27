@@ -32,7 +32,7 @@ namespace TimeServed
             //adding custom roles
             var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var UserManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            string[] roleNames = { "Admin", "Manager", "Member" };
+            string[] roleNames = { "Attorney", "Guard", "Auditor", "Admin" };
             IdentityResult roleResult;
             foreach (var roleName in roleNames)
             {
@@ -45,7 +45,10 @@ namespace TimeServed
             var poweruser = new ApplicationUser
             {
                 UserName = Configuration.GetSection("UserSettings")["UserEmail"],
-                Email = Configuration.GetSection("UserSettings")["UserEmail"]
+                Email = Configuration.GetSection("UserSettings")["UserEmail"],
+                FirstName = Configuration.GetSection("UserSettings")["FirstName"],
+                LastName = Configuration.GetSection("UserSettings")["LastName"],
+                StreetAddress = Configuration.GetSection("UserSettings")["StreetAddress"]
             };
             string UserPassword = Configuration.GetSection("UserSettings")["UserPassword"];
             var _user = await UserManager.FindByEmailAsync(Configuration.GetSection("UserSettings")["UserEmail"]);
@@ -105,7 +108,7 @@ namespace TimeServed
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
+            CreateRoles(serviceProvider).Wait();
         }
     }
 }

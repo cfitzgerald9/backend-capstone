@@ -15,7 +15,6 @@ namespace TimeServed.Data
         {
         }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-        public DbSet <UserType> UserTypes { get; set; }
 
         public DbSet<Appointment> Appointments { get; set; }
 
@@ -25,23 +24,7 @@ namespace TimeServed.Data
         public DbSet<FavoriteLocation> FavoriteLocations { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<UserType>().HasData(
-                new UserType()
-                {
-                    Id = 1,
-                    Role = "Attorney"
-                },
-                new UserType()
-                {
-                    Id = 2,
-                    Role = "Guard"
-                },
-                new UserType()
-                {
-                    Id = 3,
-                    Role = "Auditor"
-                }
-            );
+          
             //create some locations
             modelBuilder.Entity<Location>().HasData(
               new Location()

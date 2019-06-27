@@ -26,8 +26,6 @@ namespace TimeServed.Models
         public string StreetAddress { get; set; }
         [Display(Name = "Employee ID")]
         public int? EmployeeId { get; set; }
-        [Required]
-        public int UserTypeId { get; set; }
 
     }
 }

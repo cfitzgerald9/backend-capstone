@@ -29,27 +29,11 @@ namespace TimeServed.Controllers
         public async Task<IActionResult> Index()
         {
             var currentUser = await GetCurrentUserAsync();
-            if (currentUser.UserTypeId == 1)
-            {
                 var applicationDbContext = _context.Appointments
                     .Include(o => o.client)
                     .Where(a => a.ApplicationUserId == currentUser.Id);
                 ViewData["currentUser"] = currentUser;
-                return View(await applicationDbContext.ToListAsync());
-            }
-            if (currentUser.UserTypeId == 2)
-            {
-                var applicationDbContext = _context.Appointments
-                    .Include(c => c.client)
-                    .Include(c => c.applicationUser);
-                ViewData["currentUser"] = currentUser;
-                return View(await applicationDbContext.ToListAsync());
-            }
-            else
-            {
-                return NotFound();
-            }
-            
+                return View(await applicationDbContext.ToListAsync());     
         }
 
         // GET: Appointments/Details/5
