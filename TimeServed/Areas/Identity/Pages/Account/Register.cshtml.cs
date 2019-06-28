@@ -75,6 +75,8 @@ namespace TimeServed.Areas.Identity.Pages.Account
             [Display(Name = "Last Name")]
             public string LastName { get; set; }
 
+            public string UserRole { get; set; }
+
             [Required]
             [Display(Name = "Street Address")]
             public string StreetAddress { get; set; }
@@ -99,7 +101,7 @@ namespace TimeServed.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName, StreetAddress = Input.StreetAddress, EmployeeId = Input.EmployeeId};
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName, StreetAddress = Input.StreetAddress, EmployeeId = Input.EmployeeId, UserRole = "Attorney"};
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

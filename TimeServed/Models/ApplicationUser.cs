@@ -16,6 +16,9 @@ namespace TimeServed.Models
         [Required]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
+        [Required]
+        [Display(Name = "Role")]
+        public string UserRole { get; set; }
 
         [Required]
         [Display(Name = "Last Name")]

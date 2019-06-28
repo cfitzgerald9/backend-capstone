@@ -19,6 +19,7 @@ namespace TimeServed.Controllers
         public GuardsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Guards
