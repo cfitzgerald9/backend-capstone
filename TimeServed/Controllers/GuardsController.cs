@@ -52,7 +52,7 @@ namespace TimeServed.Controllers
         // GET: Guards/Create
         public IActionResult Create()
         {
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
+            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers.Where(c => c.UserRole == "Attorney"), "Id", "LastName");
             ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "LocationName");
             return View();
         }
@@ -70,7 +70,7 @@ namespace TimeServed.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", client.ApplicationUserId);
+            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers.Where(c => c.UserRole == "Attorney"), "Id", "LastName", client.ApplicationUserId);
             ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "LocationName", client.LocationId);
             return View(client);
         }
