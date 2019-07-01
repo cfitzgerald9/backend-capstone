@@ -29,7 +29,10 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model)
+{
+    @if (item.VisitDate > DateTime.Now)
+    {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.client.FirstName) @Html.DisplayFor(modelItem => item.client.LastName)
@@ -43,7 +46,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.CheckOut)
             </td>
-            @if (item.CheckOut == null || item.CheckIn == null)
+            @if (item.CheckOut == null && item.CheckIn == null && item.VisitDate.Date == DateTime.Today)
             {
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Check-in</a>
@@ -52,16 +55,23 @@
             else
             {
                 <td>
-                    Time logged
+                    Don't forget!
                 </td>
             }
-            @if (item.VisitDate > DateTime.Now && item.CheckOut == null)
+            @if (item.CheckOut == null && item.VisitDate.Date > DateTime.Today)
             {
                 <td>
                     <a asp-action="Delete" asp-route-id="@item.Id">Cancel appointment</a>
                 </td>
             }
+            else if(item.CheckIn != null && item.CheckOut != null)
+            {
+                <td>
+                    Time logged
+                </td>
+            }
         </tr>
+    }
 }
     </tbody>
 </table>

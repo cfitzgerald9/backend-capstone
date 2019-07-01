@@ -49,15 +49,71 @@ namespace TimeServed.Controllers
         }
 
         // GET: Users/Create
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public IActionResult Create()
         {
-            return View();
+
+            CreateUserWithRoleViewModel createUserModel = new CreateUserWithRoleViewModel();
+            SelectList allRoles = new SelectList(_context.Roles, "Name", "Name");
+            // Add a 0 option to the select list
+            SelectList roles0 = RoleDropdown(allRoles);
+
+           createUserModel.Roles = roles0;
+            return View(createUserModel);
+
+
+        }
+
+
+        // POST: Users/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(CreateUserWithRoleViewModel createUser)
+        {
+            if (ModelState.IsValid)
+            {
+                var newUser = new ApplicationUser()
+                {
+                    Email = createUser.applicationUser.Email,
+                    UserName = createUser.applicationUser.UserName,
+                    FirstName = createUser.applicationUser.FirstName,
+                    LastName = createUser.applicationUser.LastName,
+                    EmployeeId = createUser.applicationUser.EmployeeId,
+                    UserRole = createUser.applicationUser.UserRole,
+                    StreetAddress = createUser.applicationUser.StreetAddress
+                };
+                var user = await _userManager
+                       .CreateAsync(newUser, "Password1234!");
+                await _userManager.AddToRoleAsync(newUser, createUser.applicationUser.UserRole);
+                await _context.SaveChangesAsync();
+                return Index();
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(createUser);
+        }
+        public static SelectList RoleDropdown(SelectList selectList)
+        {
+
+            SelectListItem firstItem = new SelectListItem()
+            {
+                Text = "Select a role"
+            };
+            List<SelectListItem> newList = selectList.ToList();
+            newList.Insert(0, firstItem);
+
+            var selectedItem = newList.FirstOrDefault(item => item.Selected);
+            var selectedItemValue = String.Empty;
+            if (selectedItem != null)
+            {
+                selectedItemValue = selectedItem.Value;
+            }
+
+            return new SelectList(newList, "Value", "Text", selectedItemValue);
         }
     }
 }
-
-        // POST: Appointments/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-     

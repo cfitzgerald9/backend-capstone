@@ -6,7 +6,7 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Appointment</h4>
+    <h4>@Html.DisplayFor(model => model.FirstName) @Html.DisplayFor(model => model.LastName), @Html.DisplayFor(model => model.UserRole)</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -27,22 +27,30 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.StreetAddress)
         </dd>
-        @if (Model.EmployeeId != null) {
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.EmployeeId)
+            @Html.DisplayNameFor(model => model.UserRole)
         </dt>
-        <dd class="col-sm-2">
-            @Html.DisplayFor(model => model.EmployeeId)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.UserRole)
         </dd>
+
+        @if (Model.EmployeeId != null)
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.EmployeeId)
+            </dt>
+            <dd class="col-sm-2">
+                @Html.DisplayFor(model => model.EmployeeId)
+            </dd>
         }
         @if (Model.PhoneNumber != null)
         {
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-        <dd class="col-sm-2">
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </dt>
+            <dd class="col-sm-2">
+                @Html.DisplayFor(model => model.PhoneNumber)
+            </dd>
         }
     </dl>
 </div>
