@@ -1,57 +1,54 @@
-﻿@model IEnumerable<TimeServed.Models.Appointment>
+﻿@model TimeServed.Models.ViewModels.AttorneyReport
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Hours worked</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.VisitDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CheckIn)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CheckOut)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.client)
-            </th>
-            <th>
                 Attorney
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.hoursWorked)
+            </th>
+
+
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.VisitDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CheckIn)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CheckOut)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.client.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.applicationUser.FirstName) @Html.DisplayFor(modelItem => item.applicationUser.LastName)
-            </td>
-            <td>
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.attorneys)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName) @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                @foreach (var item2 in Model.hoursWorked)
+                {
+                    if (Model.hoursWorked.Count > 0)
+                    {
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item2.TotalMinutes)
+                        </td>
+
+                    }
+                    else
+                    {
+                    <tr>
+                        <td>
+                            Nothing to display!
+                        </td>
+                    </tr>
+                }
+            }
+                </tr>
+
+            }
+
     </tbody>
 </table>

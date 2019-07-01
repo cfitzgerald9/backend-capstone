@@ -22,6 +22,13 @@ namespace TimeServed.Models
         [Display(Name = "Check-out")]
         public DateTime? CheckOut { get; set; }
 
+        public TimeSpan TimeSpent()
+        {
+            var x = this.CheckOut.Value - this.CheckIn.Value;
+            return x;
+        }
+
+
         public Client client { get; set; }
         public ApplicationUser applicationUser { get; set; }
     }

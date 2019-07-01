@@ -32,8 +32,19 @@ namespace TimeServed.Controllers
             var currentUser = await GetCurrentUserAsync();
                 var applicationDbContext = _context.Appointments
                     .Include(o => o.client)
-                    .Where(a => a.ApplicationUserId == currentUser.Id);
+                    .Where(a => a.ApplicationUserId == currentUser.Id)
+                    .OrderBy(a => a.VisitDate);
                 return View(await applicationDbContext.ToListAsync());     
+        }
+        public async Task<IActionResult> Previous()
+        {
+            var currentUser = await GetCurrentUserAsync();
+            var applicationDbContext = _context.Appointments
+                .Include(o => o.client)
+                .Where(a => a.ApplicationUserId == currentUser.Id)
+                .Where(a=> a.VisitDate < DateTime.Now)
+                .OrderBy(a => a.VisitDate);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Appointments/Details/5
@@ -59,10 +70,11 @@ namespace TimeServed.Controllers
 
         // GET: Appointments/Create
         [Authorize(Roles = "Attorney")]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var currentUser = await GetCurrentUserAsync();
             AppointmentClientViewModel vm = new AppointmentClientViewModel();
-            SelectList clients = new SelectList(_context.Clients, "Id", "FirstName");
+            SelectList clients = new SelectList(_context.Clients.Where(c => c.ApplicationUserId == currentUser.Id || c.ApplicationUserId == null), "Id", "FirstName");
             // Add a 0 option to the select list
             SelectList clients0 = ClientDropdown(clients);
             vm.Clients = clients0;

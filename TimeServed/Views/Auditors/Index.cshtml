@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>All appointments</h1>
+<h1>Completed appointments</h1>
 
 <table class="table">
     <thead>
@@ -19,8 +19,12 @@
                 @Html.DisplayNameFor(model => model.CheckOut)
             </th>
             <th>
+                Appointment length
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.client)
             </th>
+
             <th>
                 @Html.DisplayNameFor(model => model.client.location)
             </th>
@@ -31,7 +35,10 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model)
+{
+    @if (item.CheckIn != null && item.CheckOut != null)
+    {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.VisitDate)
@@ -43,18 +50,19 @@
                 @Html.DisplayFor(modelItem => item.CheckOut)
             </td>
             <td>
+                @item.TimeSpent().Hours:@item.TimeSpent().Minutes:@item.TimeSpent().Seconds
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.client.FirstName) @Html.DisplayFor(modelItem => item.client.LastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.client.location.LocationName) 
+                @Html.DisplayFor(modelItem => item.client.location.LocationName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.applicationUser.FirstName) @Html.DisplayFor(modelItem => item.applicationUser.LastName)
             </td>
-            <td>
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
         </tr>
+    }
 }
     </tbody>
 </table>

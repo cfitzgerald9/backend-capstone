@@ -38,13 +38,15 @@ namespace TimeServed.Controllers
         }
 
         [Authorize(Roles = "Auditor")]
-        public async Task<IActionResult> Hours()
+        public async Task<IActionResult> Hours(AttorneyReport model)
         {
-            var currentUser = await GetCurrentUserAsync();
             var applicationDbContext = _context.Appointments
-                .Include(o => o.client)
-                .Include(o => o.applicationUser);
+               .Include(o => o.client)
+               .Include(o => o.client.location)
+               .Include(o => o.applicationUser)
+               .Where(o => o.CheckIn != null && o.CheckOut != null);
             return View(await applicationDbContext.ToListAsync());
+
         }
 
         // GET: Appointments/Details/5
