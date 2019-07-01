@@ -7,6 +7,7 @@ namespace TimeServed.Models
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
     {
+   
         public ApplicationUser()
         {
 
@@ -15,6 +16,9 @@ namespace TimeServed.Models
         [Required]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
+        [Required]
+        [Display(Name = "Role")]
+        public string UserRole { get; set; }
 
         [Required]
         [Display(Name = "Last Name")]
@@ -25,8 +29,6 @@ namespace TimeServed.Models
         public string StreetAddress { get; set; }
         [Display(Name = "Employee ID")]
         public int? EmployeeId { get; set; }
-        [Required]
-        public int UserTypeId { get; set; }
 
     }
 }

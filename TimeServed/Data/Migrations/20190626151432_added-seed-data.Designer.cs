@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TimeServed.Data;
 
 namespace TimeServed.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190626151432_added-seed-data")]
+    partial class addedseeddata
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -208,10 +210,6 @@ namespace TimeServed.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("ClientId");
-
                     b.ToTable("Appointments");
                 });
 
@@ -232,10 +230,6 @@ namespace TimeServed.Data.Migrations
                     b.Property<int>("LocationId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("LocationId");
 
                     b.ToTable("Clients");
 
@@ -308,6 +302,37 @@ namespace TimeServed.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("TimeServed.Models.UserType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Role")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Role = "Attorney"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Role = "Guard"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Role = "Auditor"
+                        });
+                });
+
             modelBuilder.Entity("TimeServed.Models.ApplicationUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -323,8 +348,7 @@ namespace TimeServed.Data.Migrations
                     b.Property<string>("StreetAddress")
                         .IsRequired();
 
-                    b.Property<string>("UserRole")
-                        .IsRequired();
+                    b.Property<int>("UserTypeId");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
@@ -371,31 +395,6 @@ namespace TimeServed.Data.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("TimeServed.Models.Appointment", b =>
-                {
-                    b.HasOne("TimeServed.Models.ApplicationUser", "applicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("TimeServed.Models.Client", "client")
-                        .WithMany()
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("TimeServed.Models.Client", b =>
-                {
-                    b.HasOne("TimeServed.Models.ApplicationUser", "applicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("TimeServed.Models.Location", "location")
-                        .WithMany()
-                        .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

@@ -39,13 +39,6 @@ namespace TimeServed.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _context = context;
-
-            var userTypes = _context.UserTypes.ToList();
-            UserTypes = userTypes.Select(c => new SelectListItem
-            {
-                Value = c.Id.ToString(),
-                Text = c.Role
-            }).ToList();
         }
 
         [BindProperty]
@@ -82,6 +75,8 @@ namespace TimeServed.Areas.Identity.Pages.Account
             [Display(Name = "Last Name")]
             public string LastName { get; set; }
 
+            public string UserRole { get; set; }
+
             [Required]
             [Display(Name = "Street Address")]
             public string StreetAddress { get; set; }
@@ -106,11 +101,12 @@ namespace TimeServed.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName, StreetAddress = Input.StreetAddress, EmployeeId = Input.EmployeeId, UserTypeId = Input.UserTypeId };
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName, StreetAddress = Input.StreetAddress, EmployeeId = Input.EmployeeId, UserRole = "Attorney"};
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+                    await _userManager.AddToRoleAsync(user, "Attorney");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Page(

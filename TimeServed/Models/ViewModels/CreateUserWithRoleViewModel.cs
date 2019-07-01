@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace TimeServed.Models.ViewModels
 {
-    public class RegisterUserWithTypeViewModel
+    public class CreateUserWithRoleViewModel
     {
-        public RegisterUserWithTypeViewModel() {
+        public CreateUserWithRoleViewModel() {
     }
-        public ApplicationUser ApplicationUser { get; set; }
+        public ApplicationUser applicationUser { get; set; }
 
-        public SelectList userTypes { get; set; }
+        public SelectList Roles { get; set; }
     }
 }
