@@ -14,30 +14,38 @@
                 Attorney
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.hoursWorked)
+                Total hours(h/m/s)
+            </th>
+            <th>
+                Monthly hours (h/m/s)
             </th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model.attorneys)
         {
-            List <TimeSpan> baseTimeSpan = new List<TimeSpan>();
+            List<TimeSpan> baseTimeSpan = new List<TimeSpan>();
             var totalTime = TimeSpan.Zero;
-            
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName) @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            @foreach (var item2 in Model.appointments.Where(a => a.ApplicationUserId == item.Id))
-            {
-                baseTimeSpan.Add(item2.TimeSpent());
-                totalTime = totalTime + item2.TimeSpent();
-            }
-        <td>
-            @totalTime.Hours:@totalTime.Minutes:@totalTime.Seconds
-        </td>
-        </tr>
-        }
-
-    </tbody>
-</table>
+            var monthlyTime = TimeSpan.Zero;
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName) @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                @foreach (var item2 in Model.appointments.Where(a => a.ApplicationUserId == item.Id))
+                {
+                    totalTime = totalTime + item2.TimeSpent();
+                }
+                <td>
+                    @totalTime.Hours:@totalTime.Minutes:@totalTime.Seconds
+                </td>
+                @foreach (var item2 in Model.appointments.Where(a => a.ApplicationUserId == item.Id && a.VisitDate.Month == DateTime.Now.Month))
+                {
+                    monthlyTime = monthlyTime + item2.TimeSpent();
+                }
+                <td>
+                    @monthlyTime.Hours:@monthlyTime.Minutes:@monthlyTime.Seconds
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
