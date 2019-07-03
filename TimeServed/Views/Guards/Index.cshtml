@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Inmates</h1>
 
 <p>
     <a asp-action="Create">Add inmate</a>
@@ -41,12 +41,17 @@
             </td>
             @if (item.ApplicationUserId != null)
             {
-            <td>
-                @Html.DisplayFor(modelItem => item.applicationUser.FirstName) @Html.DisplayFor(modelItem => item.applicationUser.LastName)
-            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.applicationUser.FirstName) @Html.DisplayFor(modelItem => item.applicationUser.LastName)
+                </td>
+            }
+            @if (item.ApplicationUserId == null)
+            {
+                <td>
+                  No current attorney
+                </td>
             }
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Release</a>
             </td>

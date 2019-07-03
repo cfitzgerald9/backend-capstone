@@ -11,8 +11,10 @@ namespace TimeServed.Models
         public int Id { get; set; }
 
         [Required]
+        [Display(Name = "Attorney")]
         public string ApplicationUserId { get; set; }
         [Required]
+        [Display(Name = "Client")]
         public int ClientId { get; set; }
         [Required]
         [Display(Name = "Scheduled date")]
@@ -21,6 +23,13 @@ namespace TimeServed.Models
         public DateTime? CheckIn { get; set; }
         [Display(Name = "Check-out")]
         public DateTime? CheckOut { get; set; }
+
+        public TimeSpan TimeSpent()
+        {
+            var x = this.CheckOut.Value - this.CheckIn.Value;
+            return x;
+        }
+
 
         public Client client { get; set; }
         public ApplicationUser applicationUser { get; set; }

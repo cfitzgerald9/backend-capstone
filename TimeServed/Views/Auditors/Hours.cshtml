@@ -1,57 +1,51 @@
-﻿@model IEnumerable<TimeServed.Models.Appointment>
+﻿@model TimeServed.Models.ViewModels.AttorneyReport
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<h1>Hours worked</h1>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.VisitDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CheckIn)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CheckOut)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.client)
-            </th>
-            <th>
                 Attorney
             </th>
-            <th></th>
+            <th>
+                Total hours(h/m/s)
+            </th>
+            <th>
+                Monthly hours (h/m/s)
+            </th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.VisitDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CheckIn)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CheckOut)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.client.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.applicationUser.FirstName) @Html.DisplayFor(modelItem => item.applicationUser.LastName)
-            </td>
-            <td>
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        @foreach (var item in Model.attorneys)
+        {
+            List<TimeSpan> baseTimeSpan = new List<TimeSpan>();
+            var totalTime = TimeSpan.Zero;
+            var monthlyTime = TimeSpan.Zero;
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName) @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                @foreach (var item2 in Model.appointments.Where(a => a.ApplicationUserId == item.Id))
+                {
+                    totalTime = totalTime + item2.TimeSpent();
+                }
+                <td>
+                    @totalTime.Hours:@totalTime.Minutes:@totalTime.Seconds
+                </td>
+                @foreach (var item2 in Model.appointments.Where(a => a.ApplicationUserId == item.Id && a.VisitDate.Month == DateTime.Now.Month))
+                {
+                    monthlyTime = monthlyTime + item2.TimeSpent();
+                }
+                <td>
+                    @monthlyTime.Hours:@monthlyTime.Minutes:@monthlyTime.Seconds
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>

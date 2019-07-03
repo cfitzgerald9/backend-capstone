@@ -1,0 +1,49 @@
+﻿@model IEnumerable<TimeServed.Models.Appointment>
+
+@{
+    ViewData["Title"] = "Appointments";
+}
+
+<h1>Appointments</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.VisitDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.client)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.client.location)
+            </th>
+            <th>
+                Attorney
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model)
+{
+    if (item.VisitDate > DateTime.Today)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.VisitDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.client.FirstName)  @Html.DisplayFor(modelItem => item.client.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.client.location.LocationName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.applicationUser.FirstName)  @Html.DisplayFor(modelItem => item.applicationUser.LastName)
+            </td>
+        </tr>
+    }
+}
+    </tbody>
+</table>
