@@ -14,6 +14,7 @@ namespace TimeServed.Models
         }
 
         [Required]
+        [RegularExpression(@"^[A-Z]+[a-zA-Z""'\s-]*$")]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
         [Required]
@@ -22,6 +23,7 @@ namespace TimeServed.Models
 
         [Required]
         [Display(Name = "Last Name")]
+        [RegularExpression(@"^[A-Z]+[a-zA-Z""'\s-]*$")]
         public string LastName { get; set; }
 
         [Required]

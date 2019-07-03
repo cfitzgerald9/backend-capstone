@@ -10,8 +10,10 @@ namespace TimeServed.Models
     {
         public int Id { get; set; }
         [Required]
+        [Display(Name = "Facility Name")]
         public string LocationName { get; set; }
         [Required]
+        [Display(Name = "Facility Name")]
         public string StreetAddress { get; set; }
     }
 }

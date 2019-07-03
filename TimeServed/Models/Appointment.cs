@@ -11,8 +11,10 @@ namespace TimeServed.Models
         public int Id { get; set; }
 
         [Required]
+        [Display(Name = "Attorney")]
         public string ApplicationUserId { get; set; }
         [Required]
+        [Display(Name = "Client")]
         public int ClientId { get; set; }
         [Required]
         [Display(Name = "Scheduled date")]

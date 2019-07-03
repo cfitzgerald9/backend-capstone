@@ -58,6 +58,7 @@ namespace TimeServed.Controllers
 
             var appointment = await _context.Appointments
                 .Include(o => o.client)
+                .Include(o => o.client.location)
                 .Include(o => o.applicationUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (appointment == null)
@@ -195,6 +196,9 @@ namespace TimeServed.Controllers
                 return NotFound();
             }
             var appointment = await _context.Appointments
+                .Include(o => o.client)
+                .Include(o => o.client.location)
+                .Include(o => o.applicationUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (appointment == null)
             {
