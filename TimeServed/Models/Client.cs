@@ -29,5 +29,7 @@ namespace TimeServed.Models
         public ApplicationUser applicationUser { get; set; }
         [Display(Name = "Attorney ID")]
         public string ApplicationUserId { get; set; }
+
+        public bool isActive { get; set; }
     }
 }

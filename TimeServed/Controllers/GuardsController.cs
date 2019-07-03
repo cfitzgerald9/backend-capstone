@@ -29,7 +29,7 @@ namespace TimeServed.Controllers
         [Authorize(Roles = "Guard")]
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Clients.Include(c => c.applicationUser).Include(c => c.location);
+            var applicationDbContext = _context.Clients.Include(c => c.applicationUser).Include(c => c.location).Where(c=> c.isActive == true);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -55,6 +55,7 @@ namespace TimeServed.Controllers
             var client = await _context.Clients
                 .Include(c => c.applicationUser)
                 .Include(c => c.location)
+                .Where(c => c.isActive == true)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (client == null)
             {
@@ -91,6 +92,7 @@ namespace TimeServed.Controllers
         {
             if (ModelState.IsValid)
             {
+                client.isActive = true;
                 _context.Add(client);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -129,7 +131,8 @@ namespace TimeServed.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var client = await _context.Clients.FindAsync(id);
-            _context.Clients.Remove(client);
+            client.isActive = false;
+            _context.Clients.Update(client);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

@@ -60,6 +60,7 @@ namespace TimeServed.Controllers
                 .Include(o => o.client)
                 .Include(o => o.client.location)
                 .Include(o => o.applicationUser)
+                .Where(o => o.client.isActive == true)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (appointment == null)
             {
@@ -75,7 +76,7 @@ namespace TimeServed.Controllers
         {
             var currentUser = await GetCurrentUserAsync();
             AppointmentClientViewModel vm = new AppointmentClientViewModel();
-            SelectList clients = new SelectList(_context.Clients.Where(c => c.ApplicationUserId == currentUser.Id || c.ApplicationUserId == null), "Id", "FirstName");
+            SelectList clients = new SelectList(_context.Clients.Where(c => c.ApplicationUserId == currentUser.Id && c.isActive == true || c.ApplicationUserId == null && c.isActive == true), "Id", "FirstName");
             // Add a 0 option to the select list
             SelectList clients0 = ClientDropdown(clients);
             vm.Clients = clients0;
@@ -89,8 +90,9 @@ namespace TimeServed.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Attorney")]
         public async Task<IActionResult> Create(AppointmentClientViewModel vm)
-        { 
-        SelectList clients = new SelectList(_context.Clients, "Id", "FirstName");
+        {
+            var currentUser = await GetCurrentUserAsync();
+            SelectList clients = new SelectList(_context.Clients.Where(c => c.ApplicationUserId == currentUser.Id && c.isActive == true || c.ApplicationUserId == null && c.isActive == true), "Id", "FirstName");
         // Add a '0' option to the select list
         SelectList clients0 = ClientDropdown(clients);
 
@@ -99,7 +101,6 @@ namespace TimeServed.Controllers
      
            if (ModelState.IsValid)
             {
-                var currentUser = await GetCurrentUserAsync();
                 vm.appointment.ApplicationUserId = currentUser.Id;
                 _context.Add(vm.appointment);
                 await _context.SaveChangesAsync();
