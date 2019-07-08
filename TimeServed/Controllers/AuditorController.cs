@@ -28,24 +28,60 @@ namespace TimeServed.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
         // GET: Appointments
         [Authorize(Roles = "Auditor")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string nameString, string dateString)
         {
             var currentUser = await GetCurrentUserAsync();
+
             var applicationDbContext = _context.Appointments
                 .Include(o => o.client)
                 .Include(o => o.client.location)
                 .Include(o => o.applicationUser);
+            //if (nameString != null)
+            //{
+            //    applicationDbContext = applicationDbContext.Where(a => a.applicationUser.FirstName.Contains(nameString));
+            //}
+            //if (dateString != null)
+            //{
+            //    applicationDbContext = applicationDbContext.Where(p => p.VisitDate.Date.CompareTo(dateString) );
+            //}
             return View(await applicationDbContext.ToListAsync());
         }
 
         [Authorize(Roles = "Auditor")]
         public async Task<IActionResult> Hours(AttorneyReport model)
         {
-            model.appointments = _context.Appointments.Where(a => a.CheckIn != null && a.CheckOut != null).ToList();
+            AttorneyWithHoursViewModel vm = new AttorneyWithHoursViewModel();
+            model.appointments = _context.Appointments.Where(a => a.CheckIn != null && a.CheckOut != null).Include(a => a.applicationUser).ToList();
             model.attorneys = _context.ApplicationUsers.Where(u => u.UserRole == "Attorney").ToList();
+          
 
-            ViewBag.apps = model.appointments;
-            ViewBag.atts = model.attorneys;
+            TimeSpan hours = TimeSpan.Zero;
+            List<string> names = new List<string>();
+            List<string> attorneyIds = new List<string>();
+
+
+            vm.attorneys = model.attorneys;
+           
+            foreach (Appointment a in model.appointments)
+            {
+                foreach (ApplicationUser au in vm.attorneys)
+                {
+                    if (a.ApplicationUserId == au.Id)
+                    {
+                        var attorneyHours = hours + a.TimeSpent();
+                        vm.hoursWorked.Add(attorneyHours);
+                    }
+                }
+            }
+            
+
+
+
+            ViewBag.hours = vm.hoursWorked;
+            ViewBag.attorneys = model.attorneys;
+            ViewBag.names = names;
+
+
             return View(model);
         }
 

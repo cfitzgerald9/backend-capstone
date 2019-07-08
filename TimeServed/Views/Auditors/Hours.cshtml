@@ -60,15 +60,15 @@
      
     </body>
     <script>
-    var appArray = @Html.Raw(Json.Serialize(ViewBag.apps));
-        var attArray = @Html.Raw(Json.Serialize(ViewBag.atts));
-        console.log(appArray);
+        var hourArray = @Html.Raw(Json.Serialize(ViewBag.hours));
+        var nameArray = @Html.Raw(Json.Serialize(ViewBag.names));
+        console.log(hourArray);
         
     var dataT = {
-            labels: attArray,
+            labels: nameArray,
             datasets: [{
                 label: "Attorneys",
-                data: appArray.FirstName,
+                data: hourArray,
                 fill: false,
                 backgroundColor: ["rgba(54, 162, 235, 0.2)", "rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)", "rgba(255, 205, 86, 0.2)", "rgba(75, 192, 192, 0.2)", "rgba(153, 102, 255, 0.2)", "rgba(201, 203, 207, 0.2)"],
                 borderColor: ["rgb(54, 162, 235)", "rgb(255, 99, 132)", "rgb(255, 159, 64)", "rgb(255, 205, 86)", "rgb(75, 192, 192)", "rgb(153, 102, 255)", "rgb(201, 203, 207)"],
@@ -85,7 +85,7 @@
                 legend: { position: 'bottom' },
                 scales: {
                 xAxes: [{ gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' } }],
-                yAxes: [{ gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' }, ticks: { stepSize: 40, beginAtZero: true } }]
+                yAxes: [{ gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' }, ticks: { stepSize: 10, beginAtZero: true } }]
             },
         }
         });
