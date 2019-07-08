@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -42,10 +43,12 @@ namespace TimeServed.Controllers
         {
             model.appointments = _context.Appointments.Where(a => a.CheckIn != null && a.CheckOut != null).ToList();
             model.attorneys = _context.ApplicationUsers.Where(u => u.UserRole == "Attorney").ToList();
-               
-            return View(model);
 
+            ViewBag.apps = model.appointments;
+            ViewBag.atts = model.attorneys;
+            return View(model);
         }
+
 
         // GET: Appointments/Details/5
         [Authorize(Roles = "Auditor")]
