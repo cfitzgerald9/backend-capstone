@@ -53,38 +53,21 @@ namespace TimeServed.Controllers
         [Authorize(Roles = "Auditor")]
         public async Task<IActionResult> Hours(AttorneyReport model)
         {
-            AttorneyWithHoursViewModel vm = new AttorneyWithHoursViewModel();
             model.appointments = _context.Appointments.Where(a => a.CheckIn != null && a.CheckOut != null).Include(a => a.applicationUser).ToList();
             model.attorneys = _context.ApplicationUsers.Where(u => u.UserRole == "Attorney").ToList();
-          
-
-            TimeSpan hours = TimeSpan.Zero;
-            List<TimeSpan> emptyHours = new List<TimeSpan>();
             List<string> names = new List<string>();
-            List<string> attorneyIds = new List<string>();
-
-
-            vm.attorneys = model.attorneys;
-           
-            foreach (Appointment a in model.appointments)
-            {
-                foreach (ApplicationUser au in vm.attorneys)
-                {
-                    if (a.ApplicationUserId == au.Id)
-                    {
-                        var attorneyHours = hours + a.TimeSpent();
-                        emptyHours.Add(attorneyHours);
-                    }
+                foreach (Appointment a in model.appointments)
+                { 
+                     model.hoursWorked.Add(a.TimeSpent());
                 }
-            }
-            vm.hoursWorked = emptyHours;
-            
-
-
-
-            ViewBag.hours = vm.hoursWorked;
-            ViewBag.attorneys = model.attorneys;
+                foreach (ApplicationUser au in model.attorneys)
+                {
+                     string attorneyName = au.FirstName + " " + au.LastName;
+                     names.Add(attorneyName);
+                }
+            ViewBag.appointments = model.appointments;
             ViewBag.names = names;
+            ViewBag.hours = model.hoursWorked;
 
 
             return View(model);
