@@ -28,23 +28,26 @@ namespace TimeServed.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
         // GET: Appointments
         [Authorize(Roles = "Auditor")]
-        public async Task<IActionResult> Index(string nameString, string dateString)
+        public async Task<IActionResult> Index(string nameString, int? searchDate)
         {
-            var currentUser = await GetCurrentUserAsync();
-
-            var applicationDbContext = _context.Appointments
+            var currentUser = GetCurrentUserAsync();
+            var applicationDbContext = await _context.Appointments
                 .Include(o => o.client)
                 .Include(o => o.client.location)
-                .Include(o => o.applicationUser);
-            //if (nameString != null)
-            //{
-            //    applicationDbContext = applicationDbContext.Where(a => a.applicationUser.FirstName.Contains(nameString));
-            //}
-            //if (dateString != null)
-            //{
-            //    applicationDbContext = applicationDbContext.Where(p => p.VisitDate.Date.CompareTo(dateString) );
-            //}
-            return View(await applicationDbContext.ToListAsync());
+                .Include(o => o.applicationUser)
+                .ToListAsync();
+            if (nameString != null)
+            {
+                applicationDbContext = applicationDbContext.Where(a => a.applicationUser.FirstName.Contains(nameString) || a.applicationUser.LastName.Contains(nameString)).ToList();
+
+            }
+            if (searchDate != null)
+            {
+                applicationDbContext = applicationDbContext.Where(p => p.VisitDate.Month == searchDate || p.VisitDate.Year == searchDate || p.VisitDate.Day == searchDate).ToList();
+            }
+
+
+            return View(applicationDbContext.ToList());
         }
 
         [Authorize(Roles = "Auditor")]
@@ -56,6 +59,7 @@ namespace TimeServed.Controllers
           
 
             TimeSpan hours = TimeSpan.Zero;
+            List<TimeSpan> emptyHours = new List<TimeSpan>();
             List<string> names = new List<string>();
             List<string> attorneyIds = new List<string>();
 
@@ -69,10 +73,11 @@ namespace TimeServed.Controllers
                     if (a.ApplicationUserId == au.Id)
                     {
                         var attorneyHours = hours + a.TimeSpent();
-                        vm.hoursWorked.Add(attorneyHours);
+                        emptyHours.Add(attorneyHours);
                     }
                 }
             }
+            vm.hoursWorked = emptyHours;
             
 
 
