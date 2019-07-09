@@ -13,7 +13,7 @@ namespace TimeServed.Models.ViewModels
 
         public List<Location> locations { get; set; }
 
-        public List<TimeSpan> hoursWorked { get; set; } = new List<TimeSpan>();
+        public List<double> hoursWorked { get; set; } = new List<double>();
 
 
     }

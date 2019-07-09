@@ -56,20 +56,38 @@ namespace TimeServed.Controllers
             model.appointments = _context.Appointments.Where(a => a.CheckIn != null && a.CheckOut != null).Include(a => a.applicationUser).ToList();
             model.attorneys = _context.ApplicationUsers.Where(u => u.UserRole == "Attorney").ToList();
             List<string> names = new List<string>();
-                foreach (Appointment a in model.appointments)
-                { 
-                     model.hoursWorked.Add(a.TimeSpent());
-                }
-                foreach (ApplicationUser au in model.attorneys)
+            TimeSpan emptyTime = TimeSpan.Zero;
+            Dictionary<string, List<Appointment>> appointmentList = new Dictionary<string, List<Appointment>>();
+            List<Appointment> filteredAppointments = new List<Appointment>();
+            foreach (Appointment a in model.appointments)
+            {
+
+                emptyTime = a.TimeSpent() + emptyTime;
+                filteredAppointments = model.appointments.FindAll(b => b.ApplicationUserId == a.ApplicationUserId);
+                if (appointmentList.ContainsKey(a.ApplicationUserId) == false)
                 {
-                     string attorneyName = au.FirstName + " " + au.LastName;
-                     names.Add(attorneyName);
+                    appointmentList.Add(a.ApplicationUserId, filteredAppointments);
+
                 }
-            ViewBag.appointments = model.appointments;
-            ViewBag.names = names;
+                else
+                {
+                    appointmentList.TryAdd(a.ApplicationUserId, filteredAppointments);
+                }
+
+            }
+          
+            foreach (ApplicationUser au in model.attorneys)
+            {
+                string attorneyName = au.FirstName + " " + au.LastName;
+                names.Add(attorneyName);
+            }
+         
+            var testHours = emptyTime.TotalHours;
+            model.hoursWorked.Add(testHours);
+
             ViewBag.hours = model.hoursWorked;
-
-
+            ViewBag.appointments = appointmentList;
+            ViewBag.names = names;
             return View(model);
         }
 
