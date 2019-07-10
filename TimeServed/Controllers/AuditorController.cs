@@ -56,36 +56,57 @@ namespace TimeServed.Controllers
             model.appointments = _context.Appointments.Where(a => a.CheckIn != null && a.CheckOut != null).Include(a => a.applicationUser).ToList();
             model.attorneys = _context.ApplicationUsers.Where(u => u.UserRole == "Attorney").ToList();
             List<string> names = new List<string>();
-            TimeSpan emptyTime = TimeSpan.Zero;
+
+            Dictionary<string, double> addedHours = new Dictionary<string, double>();
+
+            double emptyTime = 0;
+
             Dictionary<string, List<Appointment>> appointmentList = new Dictionary<string, List<Appointment>>();
+      
             List<Appointment> filteredAppointments = new List<Appointment>();
+
+            
             foreach (Appointment a in model.appointments)
             {
 
-                emptyTime = a.TimeSpent() + emptyTime;
                 filteredAppointments = model.appointments.FindAll(b => b.ApplicationUserId == a.ApplicationUserId);
                 if (appointmentList.ContainsKey(a.ApplicationUserId) == false)
                 {
                     appointmentList.Add(a.ApplicationUserId, filteredAppointments);
-
                 }
                 else
                 {
                     appointmentList.TryAdd(a.ApplicationUserId, filteredAppointments);
                 }
-
             }
-          
             foreach (ApplicationUser au in model.attorneys)
             {
                 string attorneyName = au.FirstName + " " + au.LastName;
                 names.Add(attorneyName);
             }
-         
-            var testHours = emptyTime.TotalHours;
-            model.hoursWorked.Add(testHours);
+            foreach (KeyValuePair <string, List<Appointment>> a in appointmentList)
+            {
+                foreach (Appointment b in a.Value)
+                {
+                    if (b.ApplicationUserId != a.Key)
+                    {
 
-            ViewBag.hours = model.hoursWorked;
+                        emptyTime = b.TimeSpent().TotalHours + emptyTime;
+                        addedHours.Add(b.ApplicationUserId, emptyTime);
+                    }
+                    else
+                    {
+                        emptyTime = b.TimeSpent().TotalHours + emptyTime;
+                        addedHours.TryAdd(b.ApplicationUserId, emptyTime);
+                    }
+                    
+                }
+
+            }    
+            model.hoursWorked.Add(emptyTime);
+
+           
+            ViewBag.hours = addedHours.Values.Reverse();
             ViewBag.appointments = appointmentList;
             ViewBag.names = names;
             return View(model);

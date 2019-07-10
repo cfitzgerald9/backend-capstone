@@ -38,15 +38,15 @@
                         {
                             totalTime = totalTime + item2.TimeSpent();
                         }
-                        <td>
-                            @totalTime.Hours:@totalTime.Minutes:@totalTime.Seconds
+                        <td class="totalHours">
+                            @totalTime.TotalHours
                         </td>
                         @foreach (var item2 in Model.appointments.Where(a => a.ApplicationUserId == item.Id && a.VisitDate.Month == DateTime.Now.Month))
                         {
                             monthlyTime = monthlyTime + item2.TimeSpent();
                         }
                         <td>
-                            @monthlyTime.Hours:@monthlyTime.Minutes:@monthlyTime.Seconds
+                            @monthlyTime.TotalHours
                         </td>
                     </tr>
                 }
@@ -63,13 +63,18 @@
         var hourArray = @Html.Raw(Json.Serialize(ViewBag.hours));
         var nameArray = @Html.Raw(Json.Serialize(ViewBag.names));
         var appointmentArray = @Html.Raw(Json.Serialize(ViewBag.appointments));
-        console.log(appointmentArray);
+        var hours = document.getElementsByClassName("totalHours");
+        var blarg = []
+        for (i = 0; i < hours.length; i++) { 
+            blarg.push(hours[i].textContent);
+}
+     console.log(blarg)
         
     var dataT = {
             labels: nameArray,
             datasets: [{
                 label: "Total hours",
-                data: hourArray,
+                data: blarg,
                 fill: false,
                 backgroundColor: ["rgba(54, 162, 235, 0.2)", "rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)", "rgba(255, 205, 86, 0.2)", "rgba(75, 192, 192, 0.2)", "rgba(153, 102, 255, 0.2)", "rgba(201, 203, 207, 0.2)"],
                 borderColor: ["rgb(54, 162, 235)", "rgb(255, 99, 132)", "rgb(255, 159, 64)", "rgb(255, 205, 86)", "rgb(75, 192, 192)", "rgb(153, 102, 255)", "rgb(201, 203, 207)"],
