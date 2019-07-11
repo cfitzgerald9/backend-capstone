@@ -5,10 +5,10 @@
 }
 
 <body>
-    <h1>Previous appointments</h1>
+    <h1 class="text-center" style="margin-top: 5vh; margin-bottom: 5vh">Previous appointments</h1>
 
-    <table class="table">
-        <thead>
+    <table class="table table-bordered">
+        <thead class ="thead-light">
             <tr>
                 <th>
                     @Html.DisplayNameFor(model => model.VisitDate)
@@ -27,7 +27,7 @@
                 </th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="table-active">
             @foreach (var item in Model)
             {
                 <tr>
