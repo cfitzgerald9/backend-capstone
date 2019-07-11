@@ -13,7 +13,7 @@ namespace TimeServed.Models
         [Display(Name = "Facility Name")]
         public string LocationName { get; set; }
         [Required]
-        [Display(Name = "Facility Name")]
+        [Display(Name = "Facility Address")]
         public string StreetAddress { get; set; }
     }
 }

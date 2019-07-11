@@ -5,17 +5,18 @@
 
 }
 
-<h1>Appointment Book</h1>
+<h1 class="text-center" style="margin-top: 5vh; margin-bottom: 3vh">Appointment Book</h1>
 
-<p>
-    <a asp-action="Create">Book a new appointment</a>
-</p>
-<table class="table">
-    <thead>
+<h5 class="text-center" style="margin-bottom: 10vh">
+    <a asp-action="Create">Book a new appointment!</a>
+</h5>
+<table class="table table-bordered">
+    <thead class="thead-light">
         <tr>
             <th>
                 Client name
             </th>
+            
             <th>
                 @Html.DisplayNameFor(model => model.VisitDate)
             </th>
@@ -29,7 +30,7 @@
             <th>Status</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="table-active">
 @foreach (var item in Model)
 {
     @if (item.VisitDate > DateTime.Now)
@@ -92,4 +93,3 @@
 }
     </tbody>
 </table>
-    <a asp-action="Previous" asp-controller="Attorneys"> Previous Appointments</a>

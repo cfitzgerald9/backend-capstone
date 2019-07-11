@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -27,25 +28,90 @@ namespace TimeServed.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
         // GET: Appointments
         [Authorize(Roles = "Auditor")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string nameString, int? searchDate)
         {
-            var currentUser = await GetCurrentUserAsync();
-            var applicationDbContext = _context.Appointments
+            var currentUser = GetCurrentUserAsync();
+            var applicationDbContext = await _context.Appointments
                 .Include(o => o.client)
                 .Include(o => o.client.location)
-                .Include(o => o.applicationUser);
-            return View(await applicationDbContext.ToListAsync());
+                .Include(o => o.applicationUser)
+                .ToListAsync();
+            if (nameString != null)
+            {
+                applicationDbContext = applicationDbContext.Where(a => a.applicationUser.FirstName.Contains(nameString) || a.applicationUser.LastName.Contains(nameString)).ToList();
+
+            }
+            if (searchDate != null)
+            {
+                applicationDbContext = applicationDbContext.Where(p => p.VisitDate.Month == searchDate || p.VisitDate.Year == searchDate || p.VisitDate.Day == searchDate).ToList();
+            }
+
+
+            return View(applicationDbContext.ToList());
         }
 
         [Authorize(Roles = "Auditor")]
         public async Task<IActionResult> Hours(AttorneyReport model)
         {
-            model.appointments = _context.Appointments.Where(a => a.CheckIn != null && a.CheckOut != null).ToList();
+            model.appointments = _context.Appointments.Where(a => a.CheckIn != null && a.CheckOut != null).Include(a => a.applicationUser).ToList();
             model.attorneys = _context.ApplicationUsers.Where(u => u.UserRole == "Attorney").ToList();
-               
-            return View(model);
+            List<string> names = new List<string>();
 
+            Dictionary<string, double> addedHours = new Dictionary<string, double>();
+
+            double emptyTime = 0;
+
+            Dictionary<string, List<Appointment>> appointmentList = new Dictionary<string, List<Appointment>>();
+      
+            List<Appointment> filteredAppointments = new List<Appointment>();
+
+            
+            foreach (Appointment a in model.appointments)
+            {
+
+                filteredAppointments = model.appointments.FindAll(b => b.ApplicationUserId == a.ApplicationUserId);
+                if (appointmentList.ContainsKey(a.ApplicationUserId) == false)
+                {
+                    appointmentList.Add(a.ApplicationUserId, filteredAppointments);
+                }
+                else
+                {
+                    appointmentList.TryAdd(a.ApplicationUserId, filteredAppointments);
+                }
+            }
+            foreach (ApplicationUser au in model.attorneys)
+            {
+                string attorneyName = au.FirstName + " " + au.LastName;
+                names.Add(attorneyName);
+            }
+            foreach (KeyValuePair <string, List<Appointment>> a in appointmentList)
+            {
+                foreach (Appointment b in a.Value)
+                {
+                    if (b.ApplicationUserId != a.Key)
+                    {
+
+                        emptyTime = b.TimeSpent().TotalHours + emptyTime;
+                        addedHours.Add(b.ApplicationUserId, emptyTime);
+                    }
+                    else
+                    {
+                        emptyTime = b.TimeSpent().TotalHours + emptyTime;
+                        addedHours.TryAdd(b.ApplicationUserId, emptyTime);
+                    }
+                    
+                }
+
+            }    
+            model.hoursWorked.Add(emptyTime);
+
+           
+            ViewBag.hours = addedHours.Values.Reverse();
+            ViewBag.appointments = appointmentList;
+            ViewBag.names = names;
+            return View(model);
         }
+
 
         // GET: Appointments/Details/5
         [Authorize(Roles = "Auditor")]

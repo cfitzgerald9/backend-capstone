@@ -17,7 +17,7 @@ namespace TimeServed.Models
         [Display(Name = "Client")]
         public int ClientId { get; set; }
         [Required]
-        [Display(Name = "Scheduled date")]
+        [Display(Name = "Scheduled Date")]
         public DateTime VisitDate { get; set; }
         [Display(Name = "Check-in")]
         public DateTime? CheckIn { get; set; }
@@ -30,8 +30,9 @@ namespace TimeServed.Models
             return x;
         }
 
-
+        [Display(Name = "Client")]
         public Client client { get; set; }
+        [Display(Name = "Attorney")]
         public ApplicationUser applicationUser { get; set; }
     }
 }
