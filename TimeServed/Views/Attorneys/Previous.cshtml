@@ -4,43 +4,50 @@
     ViewData["Title"] = "Previous";
 }
 
-<h1>Previous appointments</h1>
+<body>
+    <h1>Previous appointments</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.VisitDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CheckIn)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CheckOut)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.client)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.VisitDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CheckIn)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CheckOut)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.client.FirstName)  @Html.DisplayFor(modelItem => item.client.LastName)
-            </td> 
-        </tr>
-}
-    </tbody>
-</table>
-<a asp-action="Index" asp-controller="Attorneys"> Upcoming appointments</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.VisitDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CheckIn)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CheckOut)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.client)
+                </th>
+                <th>
+                    Time Spent(h/m/s)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="visitDate">
+                       @item.VisitDate.Date
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CheckIn)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CheckOut)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.client.FirstName)  @Html.DisplayFor(modelItem => item.client.LastName)
+                    </td>
+                    <td class="appointmentTime">
+                        @item.TimeSpent().Hours:@item.TimeSpent().Minutes:@item.TimeSpent().Seconds
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>

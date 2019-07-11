@@ -1,8 +1,38 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@if (!User.Identity.IsAuthenticated)
+{
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to TimeServed!</h1>
-    <p> Please sign-in or register to continue.</p>
-</div>
+    <div class="text-center">
+        <h1 class="display-4">Welcome to TimeServed!</h1>
+        <p> Please sign-in or register to continue.</p>
+    </div>
+}
+else if (User.Identity.IsAuthenticated && User.IsInRole("Attorney"))
+{
+
+    <div class="text-center">
+        <h1>Welcome to TimeServed!</h1>
+        <p>To book a new appointment or cancel an upcoming appointment, click upcoming.</p>
+        <p>To see your completed appointments or your hours logged, click completed.</p>
+    </div>
+}
+else if (User.Identity.IsAuthenticated && User.IsInRole("Guard"))
+{
+
+    <div class="text-center">
+        <h1>Welcome to TimeServed!</h1>
+        <p>To add an inmate to the system, or see a list of all inmates, click inmate.</p>
+        <p>To see upcoming attorney appointments, click appointments.</p>
+    </div>
+}
+else if (User.Identity.IsAuthenticated && User.IsInRole("Auditor"))
+{
+
+    <div class="text-center">
+        <h1>Welcome to TimeServed!</h1>
+        <p>To see a list of all appointments or search for specific appointments by location, c.</p>
+        <p>To see upcoming attorney appointments, click appointments.</p>
+    </div>
+}
