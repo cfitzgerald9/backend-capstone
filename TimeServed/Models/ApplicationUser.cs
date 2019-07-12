@@ -32,5 +32,13 @@ namespace TimeServed.Models
         [Display(Name = "Employee ID")]
         public int? EmployeeId { get; set; }
 
+        public string FullName
+        {
+            get
+            {
+                return FirstName + " " + LastName;
+            }
+        }
+
     }
 }

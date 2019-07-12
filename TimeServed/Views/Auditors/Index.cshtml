@@ -18,8 +18,8 @@
     </p>
 }
 
-<table class="table">
-    <thead>
+<table class="table table-bordered">
+    <thead class="thead-light">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.VisitDate)
@@ -43,10 +43,9 @@
             <th>
                 Attorney
             </th>
-            <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="table-active">
         @foreach (var item in Model)
         {
             @if (item.CheckIn != null && item.CheckOut != null)

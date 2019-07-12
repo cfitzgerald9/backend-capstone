@@ -4,10 +4,10 @@
     ViewData["Title"] = "Appointments";
 }
 
-<h1 class="text-center">Appointments</h1>
+    <h1 class="text-center" style="margin-top: 5vh; margin-bottom: 3vh">Appointments</h1>
 
-<table class="table">
-    <thead>
+<table class="table table-bordered" style="margin-top: 2rem">
+    <thead class=" thead-light">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.VisitDate)
@@ -21,10 +21,9 @@
             <th>
                 Attorney
             </th>
-            <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="table-active">
 @foreach (var item in Model)
 {
     if (item.VisitDate > DateTime.Today)
