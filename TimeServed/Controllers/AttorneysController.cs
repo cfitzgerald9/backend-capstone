@@ -76,7 +76,7 @@ namespace TimeServed.Controllers
         {
             var currentUser = await GetCurrentUserAsync();
             AppointmentClientViewModel vm = new AppointmentClientViewModel();
-            SelectList clients = new SelectList(_context.Clients.Where(c => c.ApplicationUserId == currentUser.Id && c.isActive == true || c.ApplicationUserId == null && c.isActive == true), "Id", "FirstName");
+            SelectList clients = new SelectList(_context.Clients.Where(c => c.ApplicationUserId == currentUser.Id && c.isActive == true || c.ApplicationUserId == null && c.isActive == true), "Id", "FullName");
             // Add a 0 option to the select list
             SelectList clients0 = ClientDropdown(clients);
             vm.Clients = clients0;
@@ -92,7 +92,7 @@ namespace TimeServed.Controllers
         public async Task<IActionResult> Create(AppointmentClientViewModel vm)
         {
             var currentUser = await GetCurrentUserAsync();
-            SelectList clients = new SelectList(_context.Clients.Where(c => c.ApplicationUserId == currentUser.Id && c.isActive == true || c.ApplicationUserId == null && c.isActive == true), "Id", "FirstName");
+            SelectList clients = new SelectList(_context.Clients.Where(c => c.ApplicationUserId == currentUser.Id && c.isActive == true || c.ApplicationUserId == null && c.isActive == true), "Id", "FullName");
         // Add a '0' option to the select list
         SelectList clients0 = ClientDropdown(clients);
 

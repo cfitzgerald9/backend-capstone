@@ -4,13 +4,13 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Inmates</h1>
+<h1 class="text-center" style="margin-top: 5vh; margin-bottom: 3vh">Inmates</h1>
 
-<p>
+<p class="text-center" style="margin-top: 3vh; margin-bottom: 3vh">
     <a asp-action="Create">Add inmate</a>
 </p>
-<table class="table">
-    <thead>
+<table class="table table-bordered">
+    <thead class=" thead-light">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.FirstName)
@@ -27,7 +27,7 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="table-active">
 @foreach (var item in Model) {
         <tr>
             <td>

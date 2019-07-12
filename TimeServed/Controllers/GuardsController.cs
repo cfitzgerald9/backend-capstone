@@ -71,7 +71,7 @@ namespace TimeServed.Controllers
         {
             
             CreateClientWithLocationAndAttorneyViewModel vm = new CreateClientWithLocationAndAttorneyViewModel();
-            SelectList attorneys = new SelectList(_context.ApplicationUsers.Where(c => c.UserRole == "Attorney"), "Id", "FirstName");
+            SelectList attorneys = new SelectList(_context.ApplicationUsers.Where(c => c.UserRole == "Attorney"), "Id", "FullName");
             // Add a 0 option to the select list
             SelectList attorneys0 = AttorneyDropdown(attorneys);
             vm.applicationUsers = attorneys0;
