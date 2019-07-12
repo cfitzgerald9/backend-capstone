@@ -31,5 +31,12 @@ namespace TimeServed.Models
         public string ApplicationUserId { get; set; }
 
         public bool isActive { get; set; }
+         public string FullName
+            {
+                get
+                {
+                    return FirstName + " " + LastName;
+                }
+            }
     }
 }
