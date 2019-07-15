@@ -98,16 +98,19 @@ namespace TimeServed.Controllers
 
             ModelState.Remove("appointment.ApplicatationUser");
             ModelState.Remove("appointment.ApplicationUserId");
-     
-           if (ModelState.IsValid)
+
+            if (ModelState.IsValid)
             {
                 vm.appointment.ApplicationUserId = currentUser.Id;
                 _context.Add(vm.appointment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-           vm.Clients = clients0;
-            return View(vm);
+            else
+            {
+                vm.Clients = clients0;
+                return View(vm);
+            }
         }
         // GET: Appointments/Edit/5
         [Authorize(Roles = "Attorney")]

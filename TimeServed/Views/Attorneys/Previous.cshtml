@@ -4,9 +4,9 @@
     ViewData["Title"] = "Previous";
 }
 
+
 <body>
     <h1 class="text-center" style="margin-top: 5vh; margin-bottom: 5vh">Previous appointments</h1>
-
     <table class="table table-bordered">
         <thead class ="thead-light">
             <tr>
@@ -30,6 +30,8 @@
         <tbody class="table-active">
             @foreach (var item in Model)
             {
+                if (item.CheckOut != null)
+                {
                 <tr>
                     <td class="visitDate">
                        @item.VisitDate.Date
@@ -47,6 +49,7 @@
                         @item.TimeSpent().Hours:@item.TimeSpent().Minutes:@item.TimeSpent().Seconds
                     </td>
                 </tr>
+                }
             }
         </tbody>
     </table>

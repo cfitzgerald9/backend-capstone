@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TimeServed.Models
 {
-    public class Appointment
+    public class Appointment : IValidatableObject
     {
         public int Id { get; set; }
 
@@ -34,5 +34,16 @@ namespace TimeServed.Models
         public Client client { get; set; }
         [Display(Name = "Attorney")]
         public ApplicationUser applicationUser { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (VisitDate.Date < DateTime.Now.Date)
+            {
+                yield return new ValidationResult(
+                    $"End date must be later than start date.",
+                    new[] { "EndDate" });
+            }
+        }
+
     }
 }
