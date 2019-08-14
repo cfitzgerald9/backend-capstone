@@ -31,6 +31,8 @@ namespace TimeServed.Models
         public string StreetAddress { get; set; }
         [Display(Name = "Employee ID")]
         public int? EmployeeId { get; set; }
+        [Display(Name = "Attorney ID")]
+        public int? AttorneyId { get; set; }
 
         public string FullName
         {

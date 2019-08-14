@@ -22,9 +22,6 @@
                 <th>
                     @Html.DisplayNameFor(model => model.client)
                 </th>
-                <th>
-                    Time Spent(h/m/s)
-                </th>
             </tr>
         </thead>
         <tbody class="table-active">
@@ -44,9 +41,6 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.client.FirstName)  @Html.DisplayFor(modelItem => item.client.LastName)
-                    </td>
-                    <td class="appointmentTime">
-                        @(Math.Round(item.TimeSpent().TotalHours * 4, MidpointRounding.ToEven) / 4)
                     </td>
                 </tr>
                 }

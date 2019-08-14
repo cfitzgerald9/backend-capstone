@@ -53,7 +53,7 @@ namespace TimeServed.Controllers
         [Authorize(Roles = "Auditor")]
         public async Task<IActionResult> Hours(AttorneyReport model)
         {
-            model.appointments = _context.Appointments.Where(a => a.CheckIn != null && a.CheckOut != null).Include(a => a.applicationUser).ToList();
+            model.appointments = _context.Appointments.Where(a => a.CheckIn != null && a.CheckOut != null).Include(a => a.applicationUser).Where(a => a.applicationUser.AttorneyId != null).ToList();
             model.attorneys = _context.ApplicationUsers.Where(u => u.UserRole == "Attorney").ToList();
             List<string> names = new List<string>();
 

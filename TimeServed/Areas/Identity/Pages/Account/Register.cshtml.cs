@@ -82,6 +82,8 @@ namespace TimeServed.Areas.Identity.Pages.Account
             public string StreetAddress { get; set; }
             [Display(Name = "Employee ID")]
             public int? EmployeeId { get; set; }
+            [Display(Name = "Attorney ID")]
+            public int? AttorneyId { get; set; }
             [Required]
             public int UserTypeId { get; set; }
            
@@ -101,11 +103,12 @@ namespace TimeServed.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName, StreetAddress = Input.StreetAddress, EmployeeId = Input.EmployeeId, UserRole = "Attorney"};
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName, StreetAddress = Input.StreetAddress, EmployeeId = Input.EmployeeId, UserRole = "", AttorneyId = Input.AttorneyId};
                 var result = await _userManager.CreateAsync(user, Input.Password);
-                if (result.Succeeded)
+                if (result.Succeeded && user.AttorneyId != null)
                 {
                     _logger.LogInformation("User created a new account with password.");
+                    user.UserRole = "Attorney";
                     await _userManager.AddToRoleAsync(user, "Attorney");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -121,6 +124,25 @@ namespace TimeServed.Areas.Identity.Pages.Account
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);
                 }
+                else if(result.Succeeded)
+                {
+                        _logger.LogInformation("User created a new account with password.");
+                        await _userManager.AddToRoleAsync(user, "Visitor");
+                        user.UserRole = "Visitor";
+
+                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        var callbackUrl = Url.Page(
+                            "/Account/ConfirmEmail",
+                            pageHandler: null,
+                            values: new { userId = user.Id, code = code },
+                            protocol: Request.Scheme);
+
+                        await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        return LocalRedirect(returnUrl);
+                    }
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);

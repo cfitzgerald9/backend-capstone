@@ -47,11 +47,33 @@
                 <input asp-for="Input.EmployeeId" class="form-control" />
                 <span asp-validation-for="Input.EmployeeId" class="text-danger"></span>
             </div>
+            <label>Is this an attorney account?
+                <input type="checkbox" onchange="valueChanged()" id="UserRole">
+            </label>
+            <div class="form-group" id="AttorneyId">
+                <label asp-for="Input.AttorneyId" class="control-label"></label>
+                <input asp-for="Input.AttorneyId" class="form-control" />
+            </div>
             <button type="submit" class="btn btn-primary">Register</button>
         </form>
     </div>
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        function valueChanged() {
+            var chk = $('#UserRole').is(':checked');
+            if (chk == true) {
+                $("#AttorneyId").show();  // checked
+            }
+            else {
+                $("#AttorneyId").hide();  // unchecked
+            }
+        };
+        $(document).ready(function () {
+            valueChanged();
+        });
+    </script>
 }

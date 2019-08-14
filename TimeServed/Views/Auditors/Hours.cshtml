@@ -38,16 +38,16 @@
                         {
                             totalTime = totalTime + item2.TimeSpent();
                         }
-                        <td class="totalHours">
-                            @totalTime.TotalHours
-                        </td>
+                    <td class="totalHours">
+                        @(Math.Round(totalTime.TotalHours * 4, MidpointRounding.ToEven) / 4)
+                    </td>
                         @foreach (var item2 in Model.appointments.Where(a => a.ApplicationUserId == item.Id && a.VisitDate.Month == DateTime.Now.Month))
                         {
                             monthlyTime = monthlyTime + item2.TimeSpent();
                         }
-                        <td>
-                            @monthlyTime.TotalHours
-                        </td>
+                    <td>
+                        @(Math.Round(monthlyTime.TotalHours* 4, MidpointRounding.ToEven) /4)
+                    </td>
                     </tr>
                 }
             </tbody>

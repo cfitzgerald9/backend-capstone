@@ -32,7 +32,7 @@ namespace TimeServed
             //adding custom roles
             var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var UserManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            string[] roleNames = { "Attorney", "Guard", "Auditor", "Admin" };
+            string[] roleNames = { "Attorney", "Guard", "Auditor", "Admin", "Visitor" };
             IdentityResult roleResult;
             foreach (var roleName in roleNames)
             {

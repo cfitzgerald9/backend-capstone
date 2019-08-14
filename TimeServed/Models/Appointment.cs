@@ -41,7 +41,7 @@ namespace TimeServed.Models
             {
                 yield return new ValidationResult(
                     $"End date must be later than start date.",
-                    new[] { "EndDate" });
+                    new[] { "VisitDate" });
             }
         }
 

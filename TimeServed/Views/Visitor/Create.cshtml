@@ -1,0 +1,36 @@
+﻿@model TimeServed.Models.ViewModels.AppointmentClientViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+    <h1 class="text-center" style="margin-top:5vh;">Book an appointment</h1>
+
+    <br />
+    <div class="card" style="height: 40vh; width: 40vw; margin: auto">
+        <div class="card-body">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="appointment.ClientId" class="control-label"></label>
+                    <select asp-for="appointment.ClientId" class="form-control" asp-items="@Model.Clients"></select>
+                    <span asp-validation-for="appointment.ClientId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="appointment.VisitDate" class="control-label"></label>
+                    <input asp-for="appointment.VisitDate" class="form-control" />
+                    <span asp-validation-for="appointment.VisitDate" class="text-danger"></span>
+                </div>
+                <div class="form-group text-center" style="margin-top: 5vh" >
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <a asp-action="Index">See all of your appointments</a>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }

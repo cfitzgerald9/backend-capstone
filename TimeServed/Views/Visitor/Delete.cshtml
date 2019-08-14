@@ -1,0 +1,42 @@
+﻿@model TimeServed.Models.Appointment
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+
+<h3>Are you sure you want to cancel this appointment?</h3>
+
+<hr />
+<div>
+    <dl class="row card">
+        <dt class="col-sm-2">
+            Client
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.client.FirstName) @Html.DisplayFor(model => model.client.LastName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.client.location)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.client.location.LocationName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.VisitDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.VisitDate)
+        </dd>
+
+    </dl>
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Cancel" class="btn btn-danger" />
+
+    </form>
+
+    <br />
+
+</div>
+<a asp-action="Index">Back to appointments</a>

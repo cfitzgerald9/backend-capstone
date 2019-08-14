@@ -61,7 +61,7 @@
                         @Html.DisplayFor(modelItem => item.CheckOut)
                     </td>
                     <td>
-                        @item.TimeSpent().Hours:@item.TimeSpent().Minutes:@item.TimeSpent().Seconds
+                        @Math.Round(item.TimeSpent().TotalHours, 2, MidpointRounding.AwayFromZero)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.client.FirstName) @Html.DisplayFor(modelItem => item.client.LastName)
