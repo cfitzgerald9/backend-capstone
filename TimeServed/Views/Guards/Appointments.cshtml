@@ -10,7 +10,7 @@
     <thead class=" thead-light">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.VisitDate)
+                @Html.DisplayNameFor(model => model.VisitDateStart)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.client)
@@ -26,11 +26,11 @@
     <tbody class="table-active">
 @foreach (var item in Model)
 {
-    if (item.VisitDate > DateTime.Today)
+    if (item.VisitDateStart.Date == DateTime.Today)
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.VisitDate)
+                @Html.DisplayFor(modelItem => item.VisitDateStart.TimeOfDay)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.client.FirstName)  @Html.DisplayFor(modelItem => item.client.LastName)

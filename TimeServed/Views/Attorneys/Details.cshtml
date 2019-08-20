@@ -20,13 +20,37 @@
             Client
         </dt>
         <dd class="col-sm-10">
-         @Html.DisplayFor(model => model.client.FirstName) @Html.DisplayFor(model => model.client.LastName)
+            @Html.DisplayFor(model => model.client.FirstName) @Html.DisplayFor(model => model.client.LastName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.VisitDate)
+            @Html.DisplayNameFor(model => model.VisitDateStart)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.VisitDate)
+            @Html.DisplayFor(model => model.VisitDateStart)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.VisitDateEnd)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.VisitDateEnd)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CaseNumber)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CaseNumber)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Purpose)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Purpose)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Notes)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Notes)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CheckIn)

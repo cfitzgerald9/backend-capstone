@@ -18,9 +18,14 @@ namespace TimeServed.Models
         public int ClientId { get; set; }
         [Required]
         [Display(Name = "Scheduled Date")]
-        public DateTime VisitDate { get; set; }
+        public DateTime VisitDateStart { get; set; }
+        [Required]
+        [Display(Name = "Scheduled Ending")]
+        public DateTime VisitDateEnd { get; set; }
         [Display(Name = "Check-in")]
+      
         public DateTime? CheckIn { get; set; }
+
         [Display(Name = "Check-out")]
         public DateTime? CheckOut { get; set; }
 
@@ -35,13 +40,25 @@ namespace TimeServed.Models
         [Display(Name = "Attorney")]
         public ApplicationUser applicationUser { get; set; }
 
+        public string Notes { get; set; }
+
+        public string CaseNumber { get; set; }
+
+        public string Purpose { get; set; }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (VisitDate.Date < DateTime.Now.Date)
+            if (VisitDateStart.Date < DateTime.Now.Date)
+            {
+                yield return new ValidationResult(
+                    $"Appointments must be booked at least a day ahead of time.",
+                    new[] { "VisitDateStart" });
+            }
+            if(VisitDateEnd < VisitDateStart)
             {
                 yield return new ValidationResult(
                     $"End date must be later than start date.",
-                    new[] { "VisitDate" });
+                    new[] { "VisitDateEnd" });
             }
         }
 

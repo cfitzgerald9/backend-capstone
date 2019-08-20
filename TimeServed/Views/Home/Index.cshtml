@@ -14,7 +14,7 @@ else if (User.Identity.IsAuthenticated && User.IsInRole("Attorney"))
 {
 
     <div class="text-center" style="height:50vh; margin-top:25vh;">
-    
+
         <h1>Welcome to TimeServed!</h1>
 
         <img src="~/favicon.png" style="height: 10vh; margin-top:3vh">
@@ -25,22 +25,33 @@ else if (User.Identity.IsAuthenticated && User.IsInRole("Attorney"))
 else if (User.Identity.IsAuthenticated && User.IsInRole("Guard"))
 {
 
-<div class="text-center" style="height:50vh; margin-top:25vh;">
-    <h1>Welcome to TimeServed!</h1>
+    <div class="text-center" style="height:50vh; margin-top:25vh;">
+        <h1>Welcome to TimeServed!</h1>
 
-    <img src="~/favicon.png" style="height: 10vh; margin-top:3vh">
-    <p style="margin-top:5vh">To add an inmate to the system, or see a list of all inmates, click inmate.</p>
-    <p>To see upcoming attorney appointments, click appointments.</p>
-</div>
+        <img src="~/favicon.png" style="height: 10vh; margin-top:3vh">
+        <p style="margin-top:5vh">To add an inmate to the system, or see a list of all inmates, click inmate.</p>
+        <p>To see upcoming attorney appointments, click appointments.</p>
+    </div>
 }
 else if (User.Identity.IsAuthenticated && User.IsInRole("Auditor"))
 {
 
-<div class="text-center" style="height:50vh; margin-top:25vh;">
-    <h1>Welcome to TimeServed!</h1>
+    <div class="text-center" style="height:50vh; margin-top:25vh;">
+        <h1>Welcome to TimeServed!</h1>
 
-    <img src="~/favicon.png" style="height: 10vh; margin-top:3vh">
-    <p class="mt-2" style="margin-top:5vh">To see a list of all appointments or search for specific appointments by location, c.</p>
-    <p>To see upcoming attorney appointments, click appointments.</p>
-</div>
+        <img src="~/favicon.png" style="height: 10vh; margin-top:3vh">
+        <p class="mt-2" style="margin-top:5vh">To see a list of all appointments or search for specific appointments by location, click home.</p>
+        <p>To see upcoming attorney appointments, click appointments.</p>
+    </div>
+}
+else if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+
+    <div class="text-center" style="height:50vh; margin-top:25vh;">
+        <h1>Welcome to TimeServed, admin!</h1>
+
+        <img src="~/favicon.png" style="height: 10vh; margin-top:3vh">
+        <p class="mt-2" style="margin-top:5vh"></p>
+        <p>From this page, you can add user accounts. Be very careful doing this; attorneys and visitors should make their own accounts.</p>
+    </div>
 }

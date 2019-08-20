@@ -33,7 +33,7 @@ namespace TimeServed.Controllers
                 var applicationDbContext = _context.Appointments
                     .Include(o => o.client)
                     .Where(a => a.ApplicationUserId == currentUser.Id)
-                    .OrderBy(a => a.VisitDate);
+                    .OrderBy(a => a.VisitDateStart);
                 return View(await applicationDbContext.ToListAsync());     
         }
         public async Task<IActionResult> Previous()
@@ -42,8 +42,8 @@ namespace TimeServed.Controllers
             var applicationDbContext = _context.Appointments
                 .Include(o => o.client)
                 .Where(a => a.ApplicationUserId == currentUser.Id)
-                .Where(a=> a.VisitDate < DateTime.Now)
-                .OrderBy(a => a.VisitDate);
+                .Where(a=> a.VisitDateStart < DateTime.Now)
+                .OrderBy(a => a.VisitDateStart);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -209,7 +209,7 @@ namespace TimeServed.Controllers
                 return NotFound();
             }
 
-            if (appointment.VisitDate > DateTime.Now)
+            if (appointment.VisitDateStart.Date > DateTime.Now.Date)
             {
                 return View(appointment);
             }

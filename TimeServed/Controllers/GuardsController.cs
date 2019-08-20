@@ -40,7 +40,7 @@ namespace TimeServed.Controllers
                 .Include(o => o.client)
                 .Include(a => a.applicationUser)
                 .Include(a => a.client.location)
-                .OrderBy(a => a.VisitDate);
+                .OrderBy(a => a.VisitDateStart);
             return View(await applicationDbContext.ToListAsync());
         }
         // GET: Guards/Details/5

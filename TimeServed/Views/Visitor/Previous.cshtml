@@ -11,7 +11,7 @@
         <thead class ="thead-light">
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.VisitDate)
+                    @Html.DisplayNameFor(model => model.VisitDateStart)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.CheckIn)
@@ -31,7 +31,7 @@
                 {
                 <tr>
                     <td class="visitDate">
-                       @item.VisitDate.Date
+                       @item.VisitDateStart.Date
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.CheckIn)

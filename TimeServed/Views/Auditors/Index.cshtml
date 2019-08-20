@@ -17,12 +17,21 @@
         @Html.TextBox("searchDate", "", new { placeholder = "Search by date (in numbers)", style = "width:250px" }) <br />
     </p>
 }
+@using (Html.BeginForm())
+{
+    <p>
+        @Html.TextBox("clientName", "", new { placeholder = "Search by inmate", style = "width:250px" }) <br />
+    </p>
+}
 
 <table class="table table-bordered">
     <thead class="thead-light">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.VisitDate)
+                @Html.DisplayNameFor(model => model.VisitDateStart)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VisitDateEnd)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CheckIn)
@@ -43,6 +52,15 @@
             <th>
                 Attorney
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CaseNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Notes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Purpose)
+            </th>
         </tr>
     </thead>
     <tbody class="table-active">
@@ -52,7 +70,10 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.VisitDate)
+                        @Html.DisplayFor(modelItem => item.VisitDateStart)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VisitDateEnd)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.CheckIn)
@@ -71,6 +92,9 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.applicationUser.FirstName) @Html.DisplayFor(modelItem => item.applicationUser.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Notes)
                     </td>
                 </tr>
             }

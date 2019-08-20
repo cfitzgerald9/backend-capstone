@@ -16,11 +16,26 @@
                     <span asp-validation-for="appointment.ClientId" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="appointment.VisitDate" class="control-label"></label>
-                    <input asp-for="appointment.VisitDate" class="form-control" />
-                    <span asp-validation-for="appointment.VisitDate" class="text-danger"></span>
+                    <label asp-for="appointment.VisitDateStart" class="control-label"></label>
+                    <input asp-for="appointment.VisitDateStart" class="form-control" />
+                    <span asp-validation-for="appointment.VisitDateStart" class="text-danger"></span>
                 </div>
-                <div class="form-group text-center" style="margin-top: 5vh" >
+                <div class="form-group">
+                    <label asp-for="appointment.CaseNumber" class="control-label"></label>
+                    <input asp-for="appointment.CaseNumber" class="form-control" />
+                    <span asp-validation-for="appointment.CaseNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="appointment.Purpose" class="control-label"></label>
+                    <input asp-for="appointment.Purpose" class="form-control" />
+                    <span asp-validation-for="appointment.Purpose" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="appointment.Notes" class="control-label"></label>
+                    <input asp-for="appointment.Notes" class="form-control" />
+                    <span asp-validation-for="appointment.Notes" class="text-danger"></span>
+                </div>
+                <div class="form-group text-center" style="margin-top: 5vh">
                     <input type="submit" value="Create" class="btn btn-primary" />
                 </div>
             </form>

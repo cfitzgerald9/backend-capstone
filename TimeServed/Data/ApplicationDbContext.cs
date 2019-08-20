@@ -21,7 +21,6 @@ namespace TimeServed.Data
         public DbSet<Client> Clients { get; set; }
         public DbSet<Location> Locations { get; set; }
 
-        public DbSet<FavoriteLocation> FavoriteLocations { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
           

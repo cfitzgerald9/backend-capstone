@@ -28,13 +28,14 @@ namespace TimeServed.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
         // GET: Appointments
         [Authorize(Roles = "Auditor")]
-        public async Task<IActionResult> Index(string nameString, int? searchDate)
+        public async Task<IActionResult> Index(string nameString, int? searchDate, string clientName)
         {
             var currentUser = GetCurrentUserAsync();
             var applicationDbContext = await _context.Appointments
                 .Include(o => o.client)
                 .Include(o => o.client.location)
                 .Include(o => o.applicationUser)
+                .Where(o => o.applicationUser.AttorneyId != null)
                 .ToListAsync();
             if (nameString != null)
             {
@@ -43,7 +44,11 @@ namespace TimeServed.Controllers
             }
             if (searchDate != null)
             {
-                applicationDbContext = applicationDbContext.Where(p => p.VisitDate.Month == searchDate || p.VisitDate.Year == searchDate || p.VisitDate.Day == searchDate).ToList();
+                applicationDbContext = applicationDbContext.Where(p => p.VisitDateStart.Month == searchDate || p.VisitDateStart.Year == searchDate || p.VisitDateStart.Day == searchDate).ToList();
+            }
+            if (clientName != null)
+            {
+                applicationDbContext = applicationDbContext.Where(p => p.client.FirstName.Contains(clientName) || p.client.LastName.Contains(clientName) || p.client.FullName.Contains(clientName)).ToList();
             }
 
 

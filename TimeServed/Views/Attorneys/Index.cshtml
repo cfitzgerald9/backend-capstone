@@ -16,9 +16,18 @@
             <th>
                 Client name
             </th>
-            
+
             <th>
-                @Html.DisplayNameFor(model => model.VisitDate)
+                @Html.DisplayNameFor(model => model.VisitDateStart)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VisitDateEnd)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CaseNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Purpose)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CheckIn)
@@ -33,14 +42,23 @@
     <tbody class="table-active">
 @foreach (var item in Model)
 {
-    @if (item.VisitDate > DateTime.Now)
+    @if (item.VisitDateStart > DateTime.Now)
     {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.client.FirstName) @Html.DisplayFor(modelItem => item.client.LastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.VisitDate)
+                @Html.DisplayFor(modelItem => item.VisitDateStart)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VisitDateEnd)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CaseNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Purpose)
             </td>
             @if (item.CheckIn != null && item.CheckOut != null)
             {
@@ -60,7 +78,7 @@
                     n/a
                 </td>
             }
-            @if (item.CheckOut == null && item.CheckIn == null && item.VisitDate.Date == DateTime.Today)
+            @if (item.CheckOut == null && item.CheckIn == null && item.VisitDateStart.Date == DateTime.Today)
             {
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Check-in</a>
@@ -71,7 +89,7 @@
                 <td>No actions needed</td>
             }
 
-            else if (item.CheckOut == null && item.VisitDate.Date > DateTime.Today)
+            else if (item.CheckOut == null && item.VisitDateStart.Date > DateTime.Today)
             {
                 <td>
                     <a asp-action="Delete" asp-route-id="@item.Id">Cancel appointment</a>
