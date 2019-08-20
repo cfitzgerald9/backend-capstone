@@ -6,7 +6,7 @@
     <h1 class="text-center" style="margin-top:5vh;">Book an appointment</h1>
 
     <br />
-    <div class="card" style="height: 40vh; width: 40vw; margin: auto">
+    <div class="card" style="width: 40vw; margin: auto">
         <div class="card-body">
             <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -19,6 +19,11 @@
                     <label asp-for="appointment.VisitDateStart" class="control-label"></label>
                     <input asp-for="appointment.VisitDateStart" class="form-control" />
                     <span asp-validation-for="appointment.VisitDateStart" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="appointment.VisitDateEnd" class="control-label"></label>
+                    <select asp-for="selected"  class="form-control" asp-items="@Model.Times"></select>
+                    <span asp-validation-for="appointment.VisitDateEnd" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="appointment.CaseNumber" class="control-label"></label>

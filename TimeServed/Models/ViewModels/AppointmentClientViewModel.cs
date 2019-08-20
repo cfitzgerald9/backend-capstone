@@ -13,6 +13,10 @@ namespace TimeServed.Models.ViewModels
 
         public SelectList Clients { get; set; }
 
-      
+        public List<SelectListItem> Times { get; set; }
+
+        public string selected { get; set; }
+
+
     }
 }
