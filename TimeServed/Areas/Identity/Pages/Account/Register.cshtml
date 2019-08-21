@@ -4,12 +4,11 @@
     ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
-
-<div class="row">
+<div class="align-self-center" style="margin: auto; width: 60vw; margin-left:25vw">
+    <img src="~/favicon.png" style="height: 10vh; margin-left:4vw">
     <div class="col-md-4">
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h4>Create a new account.</h4>
+            <h4 style=" margin-left:2.5vw">Create a new account.</h4>
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
@@ -27,6 +26,7 @@
                 <input asp-for="Input.ConfirmPassword" class="form-control" />
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Input.FirstName"></label>
                 <input asp-for="Input.FirstName" class="form-control" />
@@ -42,14 +42,16 @@
                 <input asp-for="Input.StreetAddress" class="form-control" />
                 <span asp-validation-for="Input.StreetAddress" class="text-danger"></span>
             </div>
-            <label>Is this an attorney account?
-                <input type="checkbox" onchange="valueChanged()" id="UserRole">
+            <label style="width:50vw; margin:auto; padding-bottom:1rem">
+                Is this an attorney account? Yes:
+                <input type="checkbox" onchange="valueChanged()" id="UserRole" style="padding:initial">
             </label>
             <div class="form-group" id="AttorneyId">
                 <label asp-for="Input.AttorneyId" class="control-label"></label>
                 <input asp-for="Input.AttorneyId" class="form-control" />
             </div>
-            <button type="submit" class="btn btn-primary">Register</button>
+
+            <button type="submit" class="btn btn-primary" style="margin-left:5vw; margin-top:3vh">Register</button>
         </form>
     </div>
 </div>

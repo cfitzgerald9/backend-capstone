@@ -4,10 +4,9 @@
 @if (!User.Identity.IsAuthenticated)
 {
 
-    <div class="text-center" style="height:50vh; margin-top:25vh;">
-        <h1 class="display-4">Welcome to TimeServed!</h1>
-        <img src="~/favicon.png" style="height: 10vh; margin-top:3vh">
-        <p style="margin-top:5vh;"> Please  <a class="text-primary" asp-area="Identity" asp-page="/Account/Login">Login</a> or <a class="text-primary" asp-area="Identity" asp-page="/Account/Register">Register</a> to continue.</p>
+    <div class="text-center" style="color: #004e9b; height:50vh; margin-top:35vh; font-family: molot; font-weight:bolder">
+        <h1 class="h1">Welcome to<img src="~/favicon.png" style="height: 15vh; font-style: italic; "></h1>
+        <p class="p-lg-1"> Please  <a class="text-success" asp-area="Identity" asp-page="/Account/Login">Login</a> or <a class="text-success" asp-area="Identity" asp-page="/Account/Register">Register</a> to continue.</p>
     </div>
 }
 else if (User.Identity.IsAuthenticated && User.IsInRole("Attorney"))
@@ -15,9 +14,9 @@ else if (User.Identity.IsAuthenticated && User.IsInRole("Attorney"))
 
     <div class="text-center" style="height:50vh; margin-top:25vh;">
 
-        <h1>Welcome to TimeServed!</h1>
+        <h1>Welcome to <img src="~/favicon.png" style="height: 10vh; margin-top:3vh"></h1>
 
-        <img src="~/favicon.png" style="height: 10vh; margin-top:3vh">
+
         <p style="margin-top:5vh">To book a new appointment or cancel an upcoming appointment, click upcoming.</p>
         <p>To see your completed appointments or your hours logged, click completed.</p>
     </div>
@@ -26,20 +25,27 @@ else if (User.Identity.IsAuthenticated && User.IsInRole("Guard"))
 {
 
     <div class="text-center" style="height:50vh; margin-top:25vh;">
-        <h1>Welcome to TimeServed!</h1>
+        <h1>Welcome to <img src="~/favicon.png" style="height: 10vh; margin-top:3vh"></h1>
 
-        <img src="~/favicon.png" style="height: 10vh; margin-top:3vh">
         <p style="margin-top:5vh">To add an inmate to the system, or see a list of all inmates, click inmate.</p>
         <p>To see upcoming attorney appointments, click appointments.</p>
     </div>
+}
+else if (User.Identity.IsAuthenticated && User.IsInRole("Visitor"))
+{
+
+<div class="text-center" style="height:50vh; margin-top:25vh;">
+    <h1>Welcome to <img src="~/favicon.png" style="height: 10vh; margin-top:3vh"></h1>
+
+    <p style="margin-top:5vh">To book a new appointment or cancel an upcoming appointment, click upcoming.</p>
+    <p>To see your completed appointments or your hours logged, click completed.</p>
+</div>
 }
 else if (User.Identity.IsAuthenticated && User.IsInRole("Auditor"))
 {
 
     <div class="text-center" style="height:50vh; margin-top:25vh;">
-        <h1>Welcome to TimeServed!</h1>
-
-        <img src="~/favicon.png" style="height: 10vh; margin-top:3vh">
+        <h1>Welcome to <img src="~/favicon.png" style="height: 15vh; margin-top:3vh"></h1>
         <p class="mt-2" style="margin-top:5vh">To see a list of all appointments or search for specific appointments by location, click home.</p>
         <p>To see upcoming attorney appointments, click appointments.</p>
     </div>
@@ -48,9 +54,9 @@ else if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
 {
 
     <div class="text-center" style="height:50vh; margin-top:25vh;">
-        <h1>Welcome to TimeServed, admin!</h1>
+        <h1>Welcome to <img src="~/favicon.png" style="height: 10vh; margin-top:3vh"></h1>
 
-        <img src="~/favicon.png" style="height: 10vh; margin-top:3vh">
+
         <p class="mt-2" style="margin-top:5vh"></p>
         <p>From this page, you can add user accounts. Be very careful doing this; attorneys and visitors should make their own accounts.</p>
     </div>

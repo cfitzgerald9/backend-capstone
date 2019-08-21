@@ -23,18 +23,18 @@ namespace TimeServed.Controllers
             _context = context;
             _userManager = userManager;
         }
-      
+
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
         // GET: Appointments
         [Authorize(Roles = "Attorney")]
         public async Task<IActionResult> Index()
         {
             var currentUser = await GetCurrentUserAsync();
-                var applicationDbContext = _context.Appointments
-                    .Include(o => o.client)
-                    .Where(a => a.ApplicationUserId == currentUser.Id)
-                    .OrderBy(a => a.VisitDateStart);
-                return View(await applicationDbContext.ToListAsync());     
+            var applicationDbContext = _context.Appointments
+                .Include(o => o.client)
+                .Where(a => a.ApplicationUserId == currentUser.Id)
+                .OrderBy(a => a.VisitDateStart);
+            return View(await applicationDbContext.ToListAsync());
         }
         public async Task<IActionResult> Previous()
         {
@@ -42,7 +42,7 @@ namespace TimeServed.Controllers
             var applicationDbContext = _context.Appointments
                 .Include(o => o.client)
                 .Where(a => a.ApplicationUserId == currentUser.Id)
-                .Where(a=> a.VisitDateStart < DateTime.Now)
+                .Where(a => a.VisitDateStart < DateTime.Now)
                 .OrderBy(a => a.VisitDateStart);
             return View(await applicationDbContext.ToListAsync());
         }
@@ -75,8 +75,9 @@ namespace TimeServed.Controllers
         public async Task<IActionResult> Create()
         {
             var currentUser = await GetCurrentUserAsync();
+            var appointments = await _context.Appointments.ToListAsync();
             AppointmentClientViewModel vm = new AppointmentClientViewModel();
-        
+
             SelectList clients = new SelectList(_context.Clients.Where(c => c.ApplicationUserId == currentUser.Id && c.isActive == true || c.ApplicationUserId == null && c.isActive == true), "Id", "FullName");
             // Add a 0 option to the select list
             SelectListItem selListItem1 = new SelectListItem() { Value = "0", Text = "Select an appointment length" };
@@ -109,6 +110,7 @@ namespace TimeServed.Controllers
         public async Task<IActionResult> Create(AppointmentClientViewModel vm)
         {
             var currentUser = await GetCurrentUserAsync();
+
             SelectList clients = new SelectList(_context.Clients.Where(c => c.ApplicationUserId == currentUser.Id && c.isActive == true || c.ApplicationUserId == null && c.isActive == true), "Id", "FullName");
 
 
@@ -133,15 +135,16 @@ namespace TimeServed.Controllers
             newList.Add(selListItem4);
             newList.Add(selListItem5);
             vm.Times = newList;
-            
+            var appointments = await _context.Appointments.ToListAsync();
+
 
 
             SelectList clients0 = ClientDropdown(clients);
-           
+
             if (vm.selected == "1")
             {
                 vm.appointment.VisitDateEnd = vm.appointment.VisitDateStart.AddMinutes(30.00);
-                
+
             }
             else if (vm.selected == "2")
             {
@@ -155,31 +158,34 @@ namespace TimeServed.Controllers
             {
                 vm.appointment.VisitDateEnd = vm.appointment.VisitDateStart.AddHours(2.00);
             }
-           
+
 
             ModelState.Remove("appointment.ApplicatationUser");
             ModelState.Remove("appointment.ApplicationUserId");
 
-
-            if (ModelState.IsValid)
+            if (appointments.FindAll(a => a.VisitDateStart == vm.appointment.VisitDateStart).Count < 5)
             {
+                if (ModelState.IsValid)
+                {
 
-            
-                vm.appointment.ApplicationUserId = currentUser.Id;
-
-                _context.Add(vm.appointment);
-                await _context.SaveChangesAsync();
-
-           
-                return RedirectToAction("Index");
+                    vm.appointment.ApplicationUserId = currentUser.Id;
+                    _context.Add(vm.appointment);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index");
                 }
-            
+                else
+                {
+                    vm.Clients = clients0;
+                    return View(vm);
+                }
+            }
             else
             {
                 vm.Clients = clients0;
                 return View(vm);
             }
         }
+    
        
         // GET: Appointments/Edit/5
         [Authorize(Roles = "Attorney")]
@@ -196,6 +202,7 @@ namespace TimeServed.Controllers
                 return NotFound();
             }
             appointment.CheckIn = DateTime.Now;
+           
             _context.Update(appointment);
             await _context.SaveChangesAsync();
             return View(appointment);
@@ -207,7 +214,7 @@ namespace TimeServed.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Attorney")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ApplicationUserId,ClientId,VisitDate,CheckIn,CheckOut")] Appointment appointment)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ApplicationUserId,ClientId,VisitDateStart, VisitDateEnd,CheckIn,CheckOut")] Appointment appointment)
         {
             var currentUser = await GetCurrentUserAsync();
             

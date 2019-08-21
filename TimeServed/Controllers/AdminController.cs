@@ -26,9 +26,12 @@ namespace TimeServed.Controllers
             _context = context;
         }
         [Authorize(Roles = "Admin")]
-        public IActionResult Index()
-        {
-            return View(_userManager.Users);
+            public async Task<IActionResult> Index()
+            {
+
+            var applicationDbContext = _context.ApplicationUsers;
+                return View(await applicationDbContext.ToListAsync());
+            
         }
         // GET: Users/Details/5
         [Authorize(Roles = "Admin")]
@@ -74,6 +77,9 @@ namespace TimeServed.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateUserWithRoleViewModel createUser)
         {
+            SelectList allRoles = new SelectList(_context.Roles, "Name", "Name");
+            // Add a 0 option to the select list
+            SelectList roles0 = RoleDropdown(allRoles);
             if (ModelState.IsValid)
             {
                 var newUser = new ApplicationUser()
@@ -90,7 +96,7 @@ namespace TimeServed.Controllers
                        .CreateAsync(newUser, "Password1234!");
                 await _userManager.AddToRoleAsync(newUser, createUser.applicationUser.UserRole);
                 await _context.SaveChangesAsync();
-                return Index();
+                return RedirectToAction("Index");
             }
 
             // If we got this far, something failed, redisplay form

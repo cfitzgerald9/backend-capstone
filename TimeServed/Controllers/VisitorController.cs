@@ -76,9 +76,25 @@ namespace TimeServed.Controllers
         {
             var currentUser = await GetCurrentUserAsync();
             AppointmentClientViewModel vm = new AppointmentClientViewModel();
+            var appointments = await _context.Appointments.ToListAsync();
             SelectList clients = new SelectList(_context.Clients.Where(c => c.ApplicationUserId == currentUser.Id && c.isActive == true || c.ApplicationUserId == null && c.isActive == true), "Id", "FullName");
             // Add a 0 option to the select list
             SelectList clients0 = ClientDropdown(clients);
+            SelectListItem selListItem1 = new SelectListItem() { Value = "0", Text = "Select an appointment length" };
+            SelectListItem selListItem2 = new SelectListItem() { Value = "1", Text = "30 minutes" };
+            SelectListItem selListItem3 = new SelectListItem() { Value = "2", Text = "1 hour" };
+            SelectListItem selListItem4 = new SelectListItem() { Value = "3", Text = "1 1/2 hours" };
+            SelectListItem selListItem5 = new SelectListItem() { Value = "4", Text = "2 hours" };
+
+
+            List<SelectListItem> newList = new List<SelectListItem>();
+
+            newList.Add(selListItem1);
+            newList.Add(selListItem2);
+            newList.Add(selListItem3);
+            newList.Add(selListItem4);
+            newList.Add(selListItem5);
+            vm.Times = newList;
             vm.Clients = clients0;
             return View(vm);
         }
@@ -92,25 +108,74 @@ namespace TimeServed.Controllers
         public async Task<IActionResult> Create(AppointmentClientViewModel vm)
         {
             var currentUser = await GetCurrentUserAsync();
+
             SelectList clients = new SelectList(_context.Clients.Where(c => c.isActive == true), "Id", "FullName");
-            var appointments = _context.Appointments.ToList();
-            List<DateTime> sameTimes = new List<DateTime>();
-            foreach(Appointment a in appointments)
-            {
-                sameTimes.Add(a.VisitDateStart);
-            };
-            // Add a '0' option to the select list
+
+
+
+            //Create a list of select list items - this will be returned as your select list
+
+
+            //Add select list item to list of selectlistitems
+
+            SelectListItem selListItem1 = new SelectListItem() { Value = "0", Text = "Select an appointment length" };
+            SelectListItem selListItem2 = new SelectListItem() { Value = "1", Text = "30 minutes" };
+            SelectListItem selListItem3 = new SelectListItem() { Value = "2", Text = "1 hour" };
+            SelectListItem selListItem4 = new SelectListItem() { Value = "3", Text = "1 1/2 hours" };
+            SelectListItem selListItem5 = new SelectListItem() { Value = "4", Text = "2 hours" };
+
+
+            List<SelectListItem> newList = new List<SelectListItem>();
+
+            newList.Add(selListItem1);
+            newList.Add(selListItem2);
+            newList.Add(selListItem3);
+            newList.Add(selListItem4);
+            newList.Add(selListItem5);
+            vm.Times = newList;
+            var appointments = await _context.Appointments.ToListAsync();
+
+
+
             SelectList clients0 = ClientDropdown(clients);
+
+            if (vm.selected == "1")
+            {
+                vm.appointment.VisitDateEnd = vm.appointment.VisitDateStart.AddMinutes(30.00);
+
+            }
+            else if (vm.selected == "2")
+            {
+                vm.appointment.VisitDateEnd = vm.appointment.VisitDateStart.AddHours(1.00);
+            }
+            else if (vm.selected == "3")
+            {
+                vm.appointment.VisitDateEnd = vm.appointment.VisitDateStart.AddMinutes(30.00).AddHours(1.00);
+            }
+            else if (vm.selected == "4")
+            {
+                vm.appointment.VisitDateEnd = vm.appointment.VisitDateStart.AddHours(2.00);
+            }
+
 
             ModelState.Remove("appointment.ApplicatationUser");
             ModelState.Remove("appointment.ApplicationUserId");
 
-            if (ModelState.IsValid)
+            if (appointments.FindAll(a => a.VisitDateStart == vm.appointment.VisitDateStart).Count < 5)
             {
-                vm.appointment.ApplicationUserId = currentUser.Id;
-                _context.Add(vm.appointment);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+
+                    vm.appointment.ApplicationUserId = currentUser.Id;
+                    _context.Add(vm.appointment);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    vm.Clients = clients0;
+                    return View(vm);
+                }
             }
             else
             {
@@ -132,6 +197,7 @@ namespace TimeServed.Controllers
             {
                 return NotFound();
             }
+            
             appointment.CheckIn = DateTime.Now;
             _context.Update(appointment);
             await _context.SaveChangesAsync();
@@ -144,7 +210,7 @@ namespace TimeServed.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Visitor")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ApplicationUserId,ClientId,VisitDate,CheckIn,CheckOut")] Appointment appointment)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ApplicationUserId,ClientId,VisitDateStart,VisitDateEnd,CheckIn,CheckOut")] Appointment appointment)
         {
             var currentUser = await GetCurrentUserAsync();
 

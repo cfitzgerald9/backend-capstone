@@ -27,12 +27,7 @@
 <table class="table table-bordered">
     <thead class="thead-light">
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.VisitDateStart)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.VisitDateEnd)
-            </th>
+         
             <th>
                 @Html.DisplayNameFor(model => model.CheckIn)
             </th>
@@ -40,7 +35,7 @@
                 @Html.DisplayNameFor(model => model.CheckOut)
             </th>
             <th>
-                Appointment length(h/m/s)
+                Appointment length(hours)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.client)
@@ -68,35 +63,36 @@
         {
             @if (item.CheckIn != null && item.CheckOut != null)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.VisitDateStart)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.VisitDateEnd)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CheckIn)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CheckOut)
-                    </td>
-                    <td>
-                        @Math.Round(item.TimeSpent().TotalHours, 2, MidpointRounding.AwayFromZero)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.client.FirstName) @Html.DisplayFor(modelItem => item.client.LastName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.client.location.LocationName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.applicationUser.FirstName) @Html.DisplayFor(modelItem => item.applicationUser.LastName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Notes)
-                    </td>
-                </tr>
+        <tr>
+           
+            <td>
+                @Html.DisplayFor(modelItem => item.CheckIn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CheckOut)
+            </td>
+            <td>
+                @(Math.Round(item.TimeSpent().TotalHours * 4, MidpointRounding.ToEven) / 4)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.client.FirstName) @Html.DisplayFor(modelItem => item.client.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.client.location.LocationName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.applicationUser.FirstName) @Html.DisplayFor(modelItem => item.applicationUser.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CaseNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Notes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Purpose)
+            </td>
+        </tr>
             }
         }
     </tbody>

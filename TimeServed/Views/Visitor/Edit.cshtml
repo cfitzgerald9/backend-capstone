@@ -4,11 +4,11 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Thanks for checking in!</h1>
+<h1 class="text-center">Thanks for checking in!</h1>
 
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="card" style="height: 40vh; width: 30vw; margin: auto">
+    <div class="text-center m-lg-auto" style="font-size: 20px;">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
@@ -28,19 +28,21 @@
                 <span asp-validation-for="CheckIn" class="text-danger"></span>
             </div>
             @*<div class="form-group">
-                <label asp-for="CheckOut" class="control-label"></label>
-                <input asp-for="CheckOut" class="form-control" readonly/>
-                <span asp-validation-for="CheckOut" class="text-danger"></span>
-            </div>*@
-
-            <div class="form-group">
+            <label asp-for="CheckOut" class="control-label"></label>
+            <input asp-for="CheckOut" class="form-control" readonly/>
+            <span asp-validation-for="CheckOut" class="text-danger"></span>
+        </div>*@
+            <div class="form-group text-center">
 
                 <input type="submit" value="Check-out" class="btn btn-primary" />
             </div>
+
+
         </form>
         <div class="textContainer"></div>
         <p>Check-in time: @Model.CheckIn</p>
         <p>When you're finished, please check-out!</p>
+        
     </div>
 </div>
 

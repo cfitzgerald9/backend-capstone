@@ -16,9 +16,12 @@
             <th>
                 Client name
             </th>
-            
+
             <th>
                 @Html.DisplayNameFor(model => model.VisitDateStart)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VisitDateEnd)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CheckIn)
@@ -41,6 +44,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.VisitDateStart)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VisitDateEnd)
             </td>
             @if (item.CheckIn != null && item.CheckOut != null)
             {

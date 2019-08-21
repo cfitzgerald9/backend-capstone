@@ -10,9 +10,7 @@
     <table class="table table-bordered">
         <thead class ="thead-light">
             <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.VisitDateStart)
-                </th>
+            
                 <th>
                     @Html.DisplayNameFor(model => model.CheckIn)
                 </th>
@@ -30,9 +28,7 @@
                 if (item.CheckOut != null)
                 {
                 <tr>
-                    <td class="visitDate">
-                       @item.VisitDateStart.Date
-                    </td>
+                 
                     <td>
                         @Html.DisplayFor(modelItem => item.CheckIn)
                     </td>

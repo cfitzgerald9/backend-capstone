@@ -21,7 +21,14 @@
             <tr>
                 <td>@user.FirstName @user.LastName</td>
                 <td>@user.Email</td>
-                <td>@user.UserRole</td>
+                @if(user.UserRole != null)
+                {
+                    <td>@user.UserRole</td>
+                }
+                else
+                {
+                    <td>Admin</td>
+                }
                 <td>
                     <a asp-action="Details" asp-route-id="@user.Id">Details</a> | <a asp-action="Delete" asp-route-id="@user.Id">Delete</a>
                 </td>
